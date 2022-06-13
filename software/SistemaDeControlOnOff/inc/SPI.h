@@ -9,7 +9,7 @@
 #define SPI_H_
 
 #include "chip.h"
-#include "board.h"
+
 
 typedef enum pinesSPI{
 	F_CS  	  = 0,

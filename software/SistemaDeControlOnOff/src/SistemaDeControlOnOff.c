@@ -1,6 +1,6 @@
 /*
 ===============================================================================
- Name        : ControlOnOff.c
+ Name        : SistemaDeControlOnOff.c
  Author      : $(author)
  Version     :
  Copyright   : $(copyright)
