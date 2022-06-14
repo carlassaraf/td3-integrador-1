@@ -12,8 +12,9 @@
 | P2.4 | P2.4 | Display 7 segmentos (E) |
 | P2.5 | P2.5 | Display 7 segmentos (F) |
 | P2.6 | P2.6 | Display 7 segmentos (G) |
-| P2.7 | P2.7 | Transistor digito 1 display 7 segmentos |
-| P2.8 | P2.8 | Transistor digito 2 display 7 segmentos |
+| P2.10 | P2.10 | Transistor digito 1 display 7 segmentos |
+| P2.11 | P2.11 | Transistor digito 2 display 7 segmentos |
+| P2.12 | P2.12 | Transistor digito 3 display 7 segmentos |
 | P0.15 | SSP0 SCK | SSP0 clock para la SD |
 | P0.16 | SSP0 SSEL0 | SSP0 slave select para la SD |
 | P0.17 | SSP0 MISO | SSP0 MISO para la SD |
