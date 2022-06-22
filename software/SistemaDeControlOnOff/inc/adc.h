@@ -28,9 +28,7 @@
 #define ADC_CH7_PORT  0
 #define ADC_CH7_PIN   2
 
-
-void init_adc(void);
-
-void init_dac(void);
+void adc_init(void);
+uint16_t adc_read(void);
 
 #endif /* ADC_H_ */
