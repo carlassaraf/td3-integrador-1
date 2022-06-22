@@ -14,22 +14,11 @@ void adc_init(void) {
 	Chip_ADC_EnableChannel(LPC_ADC, ADC_CH0, ENABLE);
 	/* Velocidad de conversión máxima */
 	Chip_ADC_SetSampleRate(LPC_ADC, &ADCSetup, ADC_MAX_SAMPLE_RATE);
+	/* Habilito la interrupcion para ADC0 */
+	NVIC_EnableIRQ(ADC0_IRQn);
 	/* Habilita la interrupción de ADC */
-	Chip_ADC_Int_SetChannelCmd(LPC_ADC, ADC_CH0, DISABLE);
+	Chip_ADC_Int_SetChannelCmd(LPC_ADC, ADC_CH0, ENABLE);
 	/* Desactiva modo ráfaga */
 	Chip_ADC_SetBurstCmd(LPC_ADC, DISABLE);
-}
-
-uint16_t adc_read(void) {
-	/* Variable para guardar el resultado */
-	uint16_t temp;
-	/* Inicio conversion */
-	Chip_ADC_SetStartMode(LPC_ADC, ADC_START_NOW, ADC_TRIGGERMODE_RISING);
-	/* Espero a que la conversion termine */
-	while(!Chip_ADC_ReadStatus(LPC_ADC, ADC_CH0, ADC_DR_DONE_STAT));
-	/* Leo el resultado y lo guardo en la variable temporal */
-	Chip_ADC_ReadValue(LPC_ADC, ADC_CH0, &temp);
-	/* Devuelvo el valor leido */
-	return temp;
 }
 
