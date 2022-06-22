@@ -8,46 +8,40 @@
 ===============================================================================
 */
 
-#if defined (__USE_LPCOPEN)
-#if defined(NO_BOARD_LIB)
-#include "chip.h"
-#else
 #include "board.h"
 #include "FreeRTOS.h"
 #include "task.h"
-#endif
-#endif
+#include "queue.h"
 
-#include <cr_section_macros.h>
+#define tskLM35_PRIORITY	tskIDLE_PRIORITY + 1UL
 
-// TODO: insert other include files here
+void lm35Task(void) {
 
-// TODO: insert other definitions and declarations here
+
+	while(1) {
+
+	}
+}
 
 int main(void) {
 
-#if defined (__USE_LPCOPEN)
-    // Read clock settings and update SystemCoreClock variable
     SystemCoreClockUpdate();
-#if !defined(NO_BOARD_LIB)
-    // Set up and initialize all required blocks and
-    // functions related to the board hardware
     Board_Init();
-    // Set the LED to the state of "On"
-    Board_LED_Set(0, true);
-#endif
-#endif
 
-    // TODO: insert code here
+	xTaskCreate(
+		lm35Task,					/* Callback para la tarea */
+		"LM35 Task",				/* Nombre de la tarea para debugging */
+		configMINIMAL_STACK_SIZE,	/* Minimo stack para la tarea */
+		NULL,						/* Sin parametros */
+		tskLM35_PRIORITY,			/* Prioridad */
+		NULL						/* Sin handler */
+	);
 
-    // Force the counter to be placed into memory
-    volatile static int i = 0 ;
-    // Enter an infinite loop, just incrementing a counter
+	/* Inicio el scheduler */
+	vTaskStartScheduler();
+
     while(1) {
-        i++ ;
-        // "Dummy" NOP to allow source level single
-        // stepping of tight while() loop
-        __asm volatile ("nop");
+
     }
     return 0 ;
 }
