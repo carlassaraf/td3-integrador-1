@@ -8,7 +8,7 @@
 #define ADC_CH0_PIN  23
 
 #define adc_start()			Chip_ADC_SetStartMode(LPC_ADC, ADC_START_NOW, ADC_TRIGGERMODE_RISING)
-#define adc_read(temp)		readAdcVal(LPC_ADC0, ADC_CH1, &temp)
+#define adc_read(x)			Chip_ADC_ReadValue(LPC_ADC, ADC_CH1, &x)
 
 void adc_init(void);
 

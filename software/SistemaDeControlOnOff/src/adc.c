@@ -1,6 +1,4 @@
-
 #include <adc.h>
-
 
 /* Inicialización del ADC */
 void adc_init(void) {
@@ -15,7 +13,7 @@ void adc_init(void) {
 	/* Velocidad de conversión máxima */
 	Chip_ADC_SetSampleRate(LPC_ADC, &ADCSetup, ADC_MAX_SAMPLE_RATE);
 	/* Habilito la interrupcion para ADC0 */
-	NVIC_EnableIRQ(ADC0_IRQn);
+	NVIC_EnableIRQ(ADC_IRQn);
 	/* Habilita la interrupción de ADC */
 	Chip_ADC_Int_SetChannelCmd(LPC_ADC, ADC_CH0, ENABLE);
 	/* Desactiva modo ráfaga */
