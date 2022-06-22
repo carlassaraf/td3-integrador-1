@@ -25,6 +25,7 @@ uint8_t numbers[] = {
 void gpio_7segments_init(void) {
 	/* Inicializo los pines como salidas */
 	Chip_GPIO_SetPinDIROut(LPC_GPIO, 2, SEGMENTS);
+	Chip_IOCON_Init(LPC_IOCON);
 }
 
 void gpio_7segments_clear(void) {

@@ -8,6 +8,8 @@
 #ifndef _7SEGMENTS_H_
 #define _7SEGMENTS_H_
 
+#include "chip.h"
+
 #define SEG_A	(1 << 0)
 #define SEG_B	(1 << 1)
 #define SEG_C	(1 << 2)
