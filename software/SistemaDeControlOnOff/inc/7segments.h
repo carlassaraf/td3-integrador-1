@@ -18,9 +18,9 @@
 #define SEG_F	(1 << 5)
 #define SEG_G	(1 << 6)
 
-#define DIGIT_1	(1 << 10)
-#define DIGIT_2	(1 << 11)
-#define DIGIT_3	(1 << 12)
+#define DIGIT_1	10
+#define DIGIT_2	11
+#define DIGIT_3	12
 
 #define SEGMENTS	SEG_A | SEG_B | SEG_C | SEG_D | SEG_E | SEG_F | SEG_G
 
