@@ -111,14 +111,13 @@ int main(void) {
 	/* Inicio el scheduler */
 	vTaskStartScheduler();
 
-    while(1) {
+    while(1);
 
-    }
     return 0 ;
 }
 
 /* Handler para las interrupciones del ADC */
-void ADC0_IRQHandler(void) {
+void ADC_IRQHandler(void) {
 	/* Control para cambiar de tarea al salir de la interrupcion */
 	static portBASE_TYPE xHigherPriorityTaskWoken = pdFALSE;
 	/* Variable auxiliar */
