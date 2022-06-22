@@ -13,6 +13,8 @@
 #include "chip.h"
 #else
 #include "board.h"
+#include "FreeRTOS.h"
+#include "task.h"
 #endif
 #endif
 
