@@ -12,9 +12,6 @@
 
 #include "proj_tasks.h"
 
-#define tskLM35_PRIORITY	tskIDLE_PRIORITY + 1UL
-#define tsk7SEG_PRIORITY	tskIDLE_PRIORITY + 2UL
-
 extern xQueueHandle queueADC;
 
 int main(void) {
@@ -28,7 +25,6 @@ int main(void) {
 
     /* Inicializo SPI */
     SPI_Inicializar();
-
 
     /* Creo la cola para los datos del ADC */
     queueADC = xQueueCreate(1, sizeof(uint16_t));
@@ -52,12 +48,14 @@ int main(void) {
 	);
 
     /* Creacion de tareas */
-	xTaskCreate(sdWriteTask, (const signed char *) "Temporizacion",
-    			configMINIMAL_STACK_SIZE, NULL, (tskIDLE_PRIORITY + 1UL),
-    			(xTaskHandle *) NULL);
-    xTaskCreate(sdReadTask, (const signed char *) "Lectura",
-        		configMINIMAL_STACK_SIZE, NULL, (tskIDLE_PRIORITY + 2UL),
-        		(xTaskHandle *) NULL);
+	xTaskCreate(
+		sdWriteTask, 							/* Callback para la tarea */
+		(const signed char *) "Temporizacion",	/* Nombre de la tarea para debugging */
+    	configMINIMAL_STACK_SIZE, 				/* Minimo stack para la tarea */
+		NULL, 									/* Sin parametros */
+		tskSDWRITE_PRIOTITY,					/* Prioridad */
+		NULL									/* Sin handler */
+	);
 
 	/* Inicio el scheduler */
 	vTaskStartScheduler();

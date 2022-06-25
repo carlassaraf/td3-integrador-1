@@ -112,38 +112,3 @@ void sdWriteTask(void *params){
 
 	}
 }
-
-void sdReadTask(void *params){
-
-	sd_variables_t carpeta;
-
-	while(1){
-
-    	/* Abro una carpeta e imprimo los datos */
-		carpeta.fr = f_mount(&carpeta.fs, "0:", 0); // Driver para la carpeta
-
-    	// Busco la carpeta, en caso de no existir fr sera distinto de FR_OK
-    	carpeta.fr = f_open(&carpeta.fil, "TD3.txt", FA_READ);
-    	if (carpeta.fr == FR_OK)
-    	{
-    		carpeta.tamanioArchivo = f_size(&carpeta.fil);
-    		carpeta.bufferRead = malloc(carpeta.tamanioArchivo);
-    		while(carpeta.tamanioArchivo > 0)
-    		{
-    			// Leemos el contenido de la carpeta, en FR tiene que devolver FR_OK si se leyó correctamente
-    			carpeta.fr = f_read (&carpeta.fil, carpeta.bufferRead, (UINT)sizeof(carpeta.bufferWrite), &carpeta.ByteRead);
-    			carpeta.tamanioArchivo -= sizeof(carpeta.bufferWrite); //
-    		}
-    		// Buscar hasta el final del archivo para agregar datos
-    		carpeta.fr = f_lseek(&carpeta.fil, f_size(&carpeta.fil));
-
-    		// Si no se pudo leer nada cierro la carpeta
-    		if (carpeta.fr != FR_OK)
-    			f_close(&carpeta.fil);
-    	}
-
-    	// Una vez leido se cierra la carpeta
-    	f_close(&carpeta.fil);
-	}
-
-}

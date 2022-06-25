@@ -17,6 +17,10 @@
 #include "SPI.h"
 #include "sd.h"
 
+#define tskLM35_PRIORITY		tskIDLE_PRIORITY + 1UL
+#define tsk7SEG_PRIORITY		tskIDLE_PRIORITY + 2UL
+#define tskSDWRITE_PRIOTITY		tskIDLE_PRIOTITY + 1UL
+
 extern xQueueHandle queueADC;
 
 typedef struct{
@@ -35,6 +39,5 @@ typedef struct{
 void lm35Task(void *params);
 void displayTask(void *params);
 void sdWriteTask(void *params);
-void sdReadTask(void *params);
 
 #endif /* PROJ_TASKS_H_ */
