@@ -7,6 +7,7 @@
 
 #ifndef _7SEGMENTS_H_
 #define _7SEGMENTS_H_
+#include "board.h"
 
 #define SEG_A	(1 << 0)
 #define SEG_B	(1 << 1)
