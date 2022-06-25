@@ -50,6 +50,8 @@ void lm35Task(void *params) {
 	}
 }
 
+uint8_t contador = 0;
+
 /* Muestreo del valor de temperatura en el 7 segmentos */
 void displayTask(void *params) {
 	/* Delay entre cambio de digitos */
@@ -63,33 +65,34 @@ void displayTask(void *params) {
 
 	while(1) {
 		/* Bloqueo la tarea hasta que termine la interrupcion */
-		xQueueReceive(queueADC, &adc, portMAX_DELAY);
+		//xQueueReceive(queueADC, &adc, portMAX_DELAY);
 		/* Calculo la temperatura */
-		temp = conv_factor * adc * 100;
+		//temp = conv_factor * adc * 100;
 		/* Obtengo el primer digito */
-		uint8_t digit1 = (uint8_t)(temp / 10);
+		//uint8_t digit1 = (uint8_t)(temp / 10);
 		/* Prendo el primer digito */
-		gpio_7segments_set_digit(DIGIT_1);
+		//gpio_7segments_set_digit(DIGIT_1);
 		/* Muestro el numero */
-		gpio_7segments_write(digit1);
+		gpio_7segments_write(contador);
+		contador++;
 		/* Bloqueo la tarea por unos momentos */
 		vTaskDelay(DELAY_MS / portTICK_RATE_MS);
 		/* Obtengo el segundo digito */
-		uint8_t digit2 = (uint8_t)temp % 10;
+		//uint8_t digit2 = (uint8_t)temp % 10;
 		/* Prendo el segundo digito */
-		gpio_7segments_set_digit(DIGIT_2);
+		//gpio_7segments_set_digit(DIGIT_2);
 		/* Muestro el numero */
-		gpio_7segments_write(digit2);
+		//gpio_7segments_write(digit2);
 		/* Bloqueo la tarea por unos momentos */
-		vTaskDelay(DELAY_MS / portTICK_RATE_MS);
+		//vTaskDelay(DELAY_MS / portTICK_RATE_MS);
 		/* Obtengo los decimales */
-		uint8_t digit3 = (uint8_t)((temp - 10 * digit1 - digit2) * 10);
+		//uint8_t digit3 = (uint8_t)((temp - 10 * digit1 - digit2) * 10);
 		/* Prendo el tercer digito */
-		gpio_7segments_set_digit(DIGIT_3);
+		//gpio_7segments_set_digit(DIGIT_3);
 		/* Muestro el numero */
-		gpio_7segments_write(digit3);
+		//gpio_7segments_write(digit3);
 		/* Bloqueo la tarea por unos momentos */
-		vTaskDelay(DELAY_MS / portTICK_RATE_MS);
+		//vTaskDelay(DELAY_MS / portTICK_RATE_MS);
 	}
 }
 static void SD_CreaCarpeta(void *pvParameters){
@@ -179,25 +182,25 @@ int main(void) {
     SystemCoreClockUpdate();
     Board_Init();
     /* Inicializo ADC */
-    adc_init();
+//    adc_init();
     /* Inicializo los 7 Segmentos */
     gpio_7segments_init();
 
     /* Inicializo SPI */
-    SPI_Inicializar();
+//    SPI_Inicializar();
 
 
     /* Creo la cola para los datos del ADC */
     queueADC = xQueueCreate(1, sizeof(uint16_t));
 
-	xTaskCreate(
-		lm35Task,								/* Callback para la tarea */
-		(const signed char *) "LM35 Task",		/* Nombre de la tarea para debugging */
-		configMINIMAL_STACK_SIZE,				/* Minimo stack para la tarea */
-		NULL,									/* Sin parametros */
-		tskLM35_PRIORITY,						/* Prioridad */
-		NULL									/* Sin handler */
-	);
+//	xTaskCreate(
+//		lm35Task,								/* Callback para la tarea */
+//		(const signed char *) "LM35 Task",		/* Nombre de la tarea para debugging */
+//		configMINIMAL_STACK_SIZE,				/* Minimo stack para la tarea */
+//		NULL,									/* Sin parametros */
+//		tskLM35_PRIORITY,						/* Prioridad */
+//		NULL									/* Sin handler */
+//	);
 
 	xTaskCreate(
 		displayTask,							/* Callback para la tarea */
@@ -209,12 +212,12 @@ int main(void) {
 	);
 
     /* Creacion de tareas */
-	xTaskCreate(SD_CreaCarpeta, (char *) "Temporizacion",
-    			configMINIMAL_STACK_SIZE, NULL, (tskIDLE_PRIORITY + 1UL),
-    			(xTaskHandle *) NULL);
-    xTaskCreate(SD_LeeCarpeta, (char *) "Lectura",
-        		configMINIMAL_STACK_SIZE, NULL, (tskIDLE_PRIORITY + 2UL),
-        		(xTaskHandle *) NULL);
+//	xTaskCreate(SD_CreaCarpeta, (char *) "Temporizacion",
+//    			configMINIMAL_STACK_SIZE, NULL, (tskIDLE_PRIORITY + 1UL),
+//    			(xTaskHandle *) NULL);
+//    xTaskCreate(SD_LeeCarpeta, (char *) "Lectura",
+//        		configMINIMAL_STACK_SIZE, NULL, (tskIDLE_PRIORITY + 2UL),
+//        		(xTaskHandle *) NULL);
 
 	/* Inicio el scheduler */
 	vTaskStartScheduler();
