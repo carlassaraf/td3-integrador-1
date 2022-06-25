@@ -24,7 +24,7 @@
 #define tsk7SEG_PRIORITY		tskIDLE_PRIORITY + 2UL
 #define tskSDWRITE_PRIOTITY		tskIDLE_PRIORITY + 1UL
 
-extern xQueueHandle queueADC;
+extern xQueueHandle queueADC, queueSP;
 
 typedef struct{
 	CARDCONFIG CardConfig;
