@@ -13,7 +13,7 @@ xQueueHandle queueADC;
 /* Tarea que inicia las lecturas del LM35 */
 void lm35Task(void *params) {
 	/* Delay entre conversiones */
-	const uint16_t DELAY_MS = 50;
+	const uint16_t DELAY_MS = 1000;
 
 	while(1) {
 		/* Inicio la conversion */
