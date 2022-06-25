@@ -10,6 +10,19 @@
 /* Cola para el ADC */
 xQueueHandle queueADC;
 
+void initTask(void *params) {
+	/* Sets up DEBUG UART */
+	DEBUGINIT();
+    /* Inicializo ADC */
+    adc_init();
+    /* Inicializo los 7 Segmentos */
+    gpio_7segments_init();
+    /* Inicializo SPI */
+    SPI_Inicializar();
+    /* Elimino inicializacion */
+    vTaskDelete(NULL);
+}
+
 /* Tarea que inicia las lecturas del LM35 */
 void lm35Task(void *params) {
 	/* Delay entre conversiones */

@@ -16,17 +16,18 @@ extern xQueueHandle queueADC;
 int main(void) {
 
     SystemCoreClockUpdate();
-    Board_Init();
-    /* Inicializo ADC */
-    adc_init();
-    /* Inicializo los 7 Segmentos */
-    gpio_7segments_init();
-
-    /* Inicializo SPI */
-    SPI_Inicializar();
 
     /* Creo la cola para los datos del ADC */
     queueADC = xQueueCreate(1, sizeof(uint16_t));
+
+    xTaskCreate(
+		initTask,								/* Callback para la tarea */
+		(const signed char *) "LM35 Task",		/* Nombre de la tarea para debugging */
+		configMINIMAL_STACK_SIZE,				/* Minimo stack para la tarea */
+		NULL,									/* Sin parametros */
+		tskINIT_PRIORITY,						/* Prioridad */
+		NULL									/* Sin handler */
+    );
 
 	xTaskCreate(
 		lm35Task,								/* Callback para la tarea */

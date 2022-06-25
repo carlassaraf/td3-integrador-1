@@ -17,6 +17,7 @@
 #include "SPI.h"
 #include "sd.h"
 
+#define tskINIT_PRIORITY		tskIDLE_PRIORITY + 3UL
 #define tskLM35_PRIORITY		tskIDLE_PRIORITY + 1UL
 #define tsk7SEG_PRIORITY		tskIDLE_PRIORITY + 2UL
 #define tskSDWRITE_PRIOTITY		tskIDLE_PRIORITY + 1UL
@@ -36,6 +37,7 @@ typedef struct{
     char *bufferRead;
 } sd_variables_t;
 
+void initTask(void *params);
 void lm35Task(void *params);
 void displayTask(void *params);
 void sdWriteTask(void *params);
