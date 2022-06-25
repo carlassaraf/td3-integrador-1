@@ -16,8 +16,10 @@
 #include "7segments.h"
 #include "SPI.h"
 #include "sd.h"
+#include "buttons.h"
 
 #define tskINIT_PRIORITY		tskIDLE_PRIORITY + 3UL
+#define	tskBTN_PRIORITY			tskIDLE_PRIORITY + 2UL
 #define tskLM35_PRIORITY		tskIDLE_PRIORITY + 1UL
 #define tsk7SEG_PRIORITY		tskIDLE_PRIORITY + 2UL
 #define tskSDWRITE_PRIOTITY		tskIDLE_PRIORITY + 1UL
@@ -38,6 +40,7 @@ typedef struct{
 } sd_variables_t;
 
 void initTask(void *params);
+void btnTask(void *params);
 void lm35Task(void *params);
 void displayTask(void *params);
 void sdWriteTask(void *params);

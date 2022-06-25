@@ -17,10 +17,16 @@ void initTask(void *params) {
     adc_init();
     /* Inicializo los 7 Segmentos */
     gpio_7segments_init();
+    /* Inicializo botones */
+    gpio_btn_init();
     /* Inicializo SPI */
     SPI_Inicializar();
-    /* Elimino inicializacion */
+    /* Elimino tarea */
     vTaskDelete(NULL);
+}
+
+void btnTask(void *params) {
+
 }
 
 /* Tarea que inicia las lecturas del LM35 */
