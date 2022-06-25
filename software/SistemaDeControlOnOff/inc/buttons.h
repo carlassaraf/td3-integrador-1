@@ -11,7 +11,7 @@
 #define	BTN_UP		21
 #define BTN_DOWN	22
 #define BTN_ENTER	27
-#define	BTN_CHANGE	28
+#define	BTN_CHANGE	3
 #define	BUTTONS	(1 << BTN_UP) | (1 << BTN_DOWN) | (1 << BTN_ENTER) | (1 << BTN_CHANGE)
 
 #define gpio_btn_init()			Chip_GPIO_SetPortDIRInput(LPC_GPIO, 0, BUTTONS)
