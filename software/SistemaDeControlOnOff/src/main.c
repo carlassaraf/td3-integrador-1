@@ -48,14 +48,14 @@ int main(void) {
 	);
 
     /* Creacion de tareas */
-	xTaskCreate(
-		sdWriteTask, 							/* Callback para la tarea */
-		(const signed char *) "Temporizacion",	/* Nombre de la tarea para debugging */
-    	configMINIMAL_STACK_SIZE, 				/* Minimo stack para la tarea */
-		NULL, 									/* Sin parametros */
-		tskSDWRITE_PRIOTITY,					/* Prioridad */
-		NULL									/* Sin handler */
-	);
+	//xTaskCreate(
+	//	sdWriteTask, 							/* Callback para la tarea */
+	//	(const signed char *) "Temporizacion",	/* Nombre de la tarea para debugging */
+    //	configMINIMAL_STACK_SIZE, 				/* Minimo stack para la tarea */
+	//	NULL, 									/* Sin parametros */
+	//	tskSDWRITE_PRIOTITY,					/* Prioridad */
+	//	NULL									/* Sin handler */
+	//);
 
 	/* Inicio el scheduler */
 	vTaskStartScheduler();

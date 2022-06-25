@@ -18,7 +18,7 @@ void initTask(void *params) {
     /* Inicializo los 7 Segmentos */
     gpio_7segments_init();
     /* Inicializo SPI */
-    SPI_Inicializar();
+    //SPI_Inicializar();
     /* Elimino inicializacion */
     vTaskDelete(NULL);
 }
