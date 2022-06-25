@@ -27,9 +27,14 @@
 							<targetPlatform binaryParser="org.eclipse.cdt.core.ELF;org.eclipse.cdt.core.GNU_ELF" id="com.crt.advproject.platform.lib.debug.1839292019" name="ARM-based MCU (Debug)" superClass="com.crt.advproject.platform.lib.debug"/>
 							<builder buildPath="${workspace_loc:/lpc_board_nxp_lpcxpresso_1769}/Debug" id="com.crt.advproject.builder.lib.debug.1504478863" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" superClass="com.crt.advproject.builder.lib.debug"/>
 							<tool id="com.crt.advproject.cpp.lib.debug.486889114" name="MCU C++ Compiler" superClass="com.crt.advproject.cpp.lib.debug">
+<<<<<<< HEAD
 								<option id="com.crt.advproject.cpp.hdrlib.697617510" name="Library headers" superClass="com.crt.advproject.cpp.hdrlib" useByScannerDiscovery="false"/>
 								<option id="gnu.cpp.compiler.option.preprocessor.def.957097406" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" useByScannerDiscovery="false"/>
 								<option id="com.crt.advproject.cpp.fpu.1391479540" name="Floating point" superClass="com.crt.advproject.cpp.fpu" useByScannerDiscovery="true"/>
+=======
+								<option id="com.crt.advproject.cpp.hdrlib.1590054587" superClass="com.crt.advproject.cpp.hdrlib" useByScannerDiscovery="false"/>
+								<option id="gnu.cpp.compiler.option.preprocessor.def.385847594" superClass="gnu.cpp.compiler.option.preprocessor.def" useByScannerDiscovery="false"/>
+>>>>>>> be51ae40ff9c49cab4db99ba7d4414214ea17a0c
 							</tool>
 							<tool id="com.crt.advproject.gcc.lib.debug.1874917562" name="MCU C Compiler" superClass="com.crt.advproject.gcc.lib.debug">
 								<option id="com.crt.advproject.gcc.arch.286139799" name="Architecture" superClass="com.crt.advproject.gcc.arch" useByScannerDiscovery="true" value="com.crt.advproject.gcc.target.cm3" valueType="enumerated"/>

@@ -7,30 +7,9 @@
 #define ADC_CH0_PORT  0
 #define ADC_CH0_PIN  23
 
-#define ADC_CH1_PORT  0
-#define ADC_CH1_PIN  24
+#define adc_start()			Chip_ADC_SetStartMode(LPC_ADC, ADC_START_NOW, ADC_TRIGGERMODE_RISING)
+#define adc_read(x)			Chip_ADC_ReadValue(LPC_ADC, ADC_CH1, &x)
 
-#define ADC_CH2_PORT  0
-#define ADC_CH2_PIN  25
-
-#define ADC_CH3_PORT  0
-#define ADC_CH3_PIN  26
-
-#define ADC_CH4_PORT  1
-#define ADC_CH4_PIN  30
-
-#define ADC_CH5_PORT  1
-#define ADC_CH5_PIN  31
-
-#define ADC_CH6_PORT  0
-#define ADC_CH6_PIN   3
-
-#define ADC_CH7_PORT  0
-#define ADC_CH7_PIN   2
-
-
-void init_adc(void);
-
-void init_dac(void);
+void adc_init(void);
 
 #endif /* ADC_H_ */

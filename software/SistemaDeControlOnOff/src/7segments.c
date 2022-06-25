@@ -9,22 +9,23 @@
 
 /* Para catodo ocmun */
 uint8_t numbers[] = {
-	0x3f,  	/* 0 */
-	0x06,  	/* 1 */
-	0x5b,  	/* 2 */
-	0x4f,  	/* 3 */
-	0x66,  	/* 4 */
-	0x6d,  	/* 5 */
-	0x7d,  	/* 6 */
-	0x07,  	/* 7 */
-	0x7f,  	/* 8 */
-	0x67,  	/* 9 */
-	0x00	/* Clear */
+	~0x3f,  	/* 0 */
+	~0x06,  	/* 1 */
+	~0x5b,  	/* 2 */
+	~0x4f,  	/* 3 */
+	~0x66,  	/* 4 */
+	~0x6d,  	/* 5 */
+	~0x7d,  	/* 6 */
+	~0x07,  	/* 7 */
+	~0x7f,  	/* 8 */
+	~0x67,  	/* 9 */
+	~0x00	/* Clear */
 };
 
 void gpio_7segments_init(void) {
 	/* Inicializo los pines como salidas */
-	Chip_GPIO_SetPinDIROut(LPC_GPIO, 2, SEGMENTS);
+	Chip_GPIO_SetPortDIROutput(LPC_GPIO, 2, SEGMENTS);
+	Chip_IOCON_Init(LPC_IOCON);
 }
 
 void gpio_7segments_clear(void) {
@@ -51,4 +52,9 @@ void gpio_7segments_set_digit(uint8_t number) {
 	Chip_GPIO_SetPinState(LPC_GPIO, 2, DIGIT_3, false);
 	/* Prendo el digito solicitado */
 	Chip_GPIO_SetPinState(LPC_GPIO, 2, number, true);
+}
+
+void gpio_7segments_set_dp(bool on) {
+
+	Chip_GPIO_SetPinState(LPC_GPIO, 2, DP, on);
 }
