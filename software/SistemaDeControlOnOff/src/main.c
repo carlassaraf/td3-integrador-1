@@ -73,8 +73,8 @@ void ADC_IRQHandler(void) {
 	/* Obtengo el valor del ADC */
 	adc_read(temp);
 	/* Ingreso el valor a la cola */
-	xQueueSendToBackFromISR(queueADC, &temp, 0);
+	xQueueSendToBackFromISR(queueADC, &temp, &xHigherPriorityTaskWoken);
 	/* Solicitar un cambio de contexto si fuese necesario */
-	portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+	portEND_SWITCHING_ISR(xHigherPriorityTaskWoken);
 }
 
