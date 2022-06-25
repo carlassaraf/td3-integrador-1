@@ -96,14 +96,21 @@ void displayTask(void *params) {
 	const float conv_factor = 3.3 / (1 << 12);
 	/* Variable para guardar el valor del ADC */
 	uint16_t adc;
-	/* Variable para guardar la temperatura */
+	/* Variable para guardar la temperatura/setpoint */
 	float temp;
 
 	while(1) {
-		/* Bloqueo la tarea hasta que termine la interrupcion */
-		xQueueReceive(queueADC, &adc, portMAX_DELAY);
-		/* Calculo la temperatura */
-		temp = conv_factor * adc * 100;
+		/* Chequeo que tengo que mostrar */
+		if(TEMPERATURE_SELECTED) {
+			/* Bloqueo la tarea hasta que termine la interrupcion */
+			xQueueReceive(queueADC, &adc, portMAX_DELAY);
+			/* Calculo la temperatura */
+			temp = conv_factor * adc * 100;
+		}
+		else {
+			/* Bloqueo la tarea hasta que llegue el dato de la cola */
+			xQueueReceive(queueSP, &temp, portMAX_DELAY);
+		}
 		/* Obtengo el primer digito */
 		uint8_t digit1 = (uint8_t)(temp / 10);
 		/* Prendo el primer digito */
