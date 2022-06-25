@@ -19,7 +19,7 @@
 
 #define tskLM35_PRIORITY		tskIDLE_PRIORITY + 1UL
 #define tsk7SEG_PRIORITY		tskIDLE_PRIORITY + 2UL
-#define tskSDWRITE_PRIOTITY		tskIDLE_PRIOTITY + 1UL
+#define tskSDWRITE_PRIOTITY		tskIDLE_PRIORITY + 1UL
 
 extern xQueueHandle queueADC;
 
