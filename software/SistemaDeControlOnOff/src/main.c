@@ -27,7 +27,7 @@ int main(void) {
 
     xTaskCreate(
 		initTask,								/* Callback para la tarea */
-		(const signed char *) "LM35 Task",		/* Nombre de la tarea para debugging */
+		(const signed char *) "Init Task",		/* Nombre de la tarea para debugging */
 		configMINIMAL_STACK_SIZE,				/* Minimo stack para la tarea */
 		NULL,									/* Sin parametros */
 		tskINIT_PRIORITY,						/* Prioridad */

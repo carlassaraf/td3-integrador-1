@@ -29,24 +29,8 @@
 #define tsk7SEG_PRIORITY		tskIDLE_PRIORITY + 2UL
 #define tskSDWRITE_PRIOTITY		tskIDLE_PRIORITY + 1UL
 
-<<<<<<< HEAD
-extern xQueueHandle queueADC, queueSD;
-=======
-extern xQueueHandle queueADC, queueSP;
 
-typedef struct{
-	CARDCONFIG CardConfig;
-	SD_BOOL tipo; 	// tipo se usa para ver el la version de la SD pero en este caso no es necesario, si para poder utilziar la funcion INIT
-    FRESULT fr; 	// variable para leer los retornos de las funciones FATS
-    FATFS fs; 		// Variable tipo FATS
-    FIL fil; 		// Archivos
-    uint32_t tamanioArchivo;
-    UINT BytesWritten;
-    UINT ByteRead;
-    char bufferWrite[20]; // Buffer
-    char *bufferRead;
-} sd_variables_t;
->>>>>>> 7b64afa5e840f4808c1f9f2da8aaa5d84c2656e6
+extern xQueueHandle queueADC, queueSD, queueSP;
 
 void initTask(void *params);
 void btnTask(void *params);
