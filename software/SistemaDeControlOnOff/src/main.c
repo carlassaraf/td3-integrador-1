@@ -25,6 +25,12 @@ int main(void) {
     /* Creo la cola para los datos del setpoint */
     queueSP = xQueueCreate(1, sizeof(float));
 
+    vQueueAddToRegistry( queueADC, (signed char *) "Cola de ADC");
+
+    vQueueAddToRegistry( queueSD, (signed char *) "Cola de SD");
+
+    vQueueAddToRegistry( queueSP, (signed char *) "Cola de SP");
+
     xTaskCreate(
 		initTask,								/* Callback para la tarea */
 		(const signed char *) "Init Task",		/* Nombre de la tarea para debugging */
@@ -66,7 +72,7 @@ int main(void) {
 	xTaskCreate(
 		sdWriteTask, 							/* Callback para la tarea */
 		(const signed char *) "Escritura SD",	/* Nombre de la tarea para debugging */
-    	configMINIMAL_STACK_SIZE, 				/* Minimo stack para la tarea */
+    	1000, 				/* Minimo stack para la tarea */
 		NULL, 									/* Sin parametros */
 		tskSDWRITE_PRIOTITY,					/* Prioridad */
 		NULL									/* Sin handler */

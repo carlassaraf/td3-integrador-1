@@ -14,14 +14,14 @@ xQueueHandle queueADC, queueSD, queueSP;
 void initTask(void *params) {
 	/* Sets up DEBUG UART */
 	DEBUGINIT();
+    /* Inicializo SPI */
+    SPI_Inicializar();
     /* Inicializo ADC */
     adc_init();
     /* Inicializo los 7 Segmentos */
     gpio_7segments_init();
     /* Inicializo botones */
     gpio_btn_init();
-    /* Inicializo SPI */
-    SPI_Inicializar();
     /* Elimino tarea */
     vTaskDelete(NULL);
 }
@@ -107,6 +107,7 @@ void displayTask(void *params) {
 			xQueueReceive(queueADC, &adc, portMAX_DELAY);
 			/* Calculo la temperatura */
 			temp = conv_factor * adc * 100;
+			xQueueSendToBack(queueSD, &temp, portMAX_DELAY);
 		}
 		else {
 			/* Bloqueo la tarea hasta que llegue el dato de la cola */
@@ -136,35 +137,34 @@ void displayTask(void *params) {
 		gpio_7segments_write(digit3);
 		/* Bloqueo la tarea por unos momentos */
 		vTaskDelay(DELAY_MS / portTICK_RATE_MS);
-		xQueueSendToBack(queueSD, &temp, portMAX_DELAY);
 	}
 }
 
 void sdWriteTask(void *params){
 
 	sd_variables_t carpeta;
-
-	/* Inicializo RITimer */
-	Chip_RIT_Init(LPC_RITIMER);
+	uint32_t i = 0;
 
     /* Inicializamos y verificamos que se inicialice correctamente el SD*/
     if (SD_Init (&carpeta.tipo) == SD_FALSE)
     {
     	// No se pudo iniciar la tarjeta. por favor, revisa la tarjeta
-        while (1);
+        while (1)
+        	i++;
     }
 
     /* Verificamos que se pueda leer */
     if (SD_ReadConfiguration (&carpeta.CardConfig) == SD_FALSE)
     {
     	// No se pudo leer
-		while (1);
+		while (1)
+			i++;
     }
     // Se inicializó con exito.
 
 	/* Abro una carpeta que exista o creo una nueva */
     carpeta.fr = f_mount(&carpeta.fs, "0:", 0); // Registro un objeto del sistema de archivos para una unidad lógica "0:", es decir es el Driver.
-    carpeta.fr = f_open(&carpeta.fil, "TD3.txt", FA_WRITE | FA_CREATE_ALWAYS); // Si no existe crea.
+    carpeta.fr = f_open(&carpeta.fil, "td3.c", FA_CREATE_ALWAYS); // Si no existe crea.
     if (carpeta.fr == FR_OK) {
     	//carpeta.fr = f_write (&carpeta.fil, carpeta.bufferWrite, sizeof(carpeta.bufferWrite), &carpeta.BytesWritten); // Escribe
     	// Buscar hasta el final del archivo para agregar datos
@@ -185,31 +185,52 @@ void sdWriteTask(void *params){
 	f_close(&carpeta.fil);
 
 	float temp;
-	char vector[20];
+	char vector[40];
+	/* vacio el vector*/
+	for (uint8_t i = 0; i < 40; i++)
+		vector[i] ='\0';
 	while(1)
 	{
 		xQueueReceive(queueSD, &temp, portMAX_DELAY);
-		itoa(temp, vector, 10);
-		strcat(vector, "\n");
 		carpeta.fr = f_mount(&carpeta.fs, "0:", 0); // Registro un objeto del sistema de archivos para una unidad lógica "0:", es decir es el Driver.
-		carpeta.fr = f_open(&carpeta.fil, "TD3.txt", FA_WRITE); // Si no existe crea.
-		if (carpeta.fr == FR_OK) {
-		    	carpeta.fr = f_write (&carpeta.fil, vector, sizeof(carpeta.bufferWrite), &carpeta.BytesWritten); // Escribe
-		    	// Buscar hasta el final del archivo para agregar datos
-		    	carpeta.fr = f_lseek(&carpeta.fil, f_size(&carpeta.fil));
-
-		        // En caso de que no poder escribirse la carpeta se debe cerrarla.
-		        if (carpeta.fr != FR_OK)
-		            f_close(&carpeta.fil);
-		    }
-
-		    // Verifico que se haya creado correctamente.
-			if (carpeta.fr != FR_OK)
+		carpeta.fr = f_open(&carpeta.fil, "td3.c", FA_READ | FA_WRITE); // Si no existe crea.
+		if (carpeta.fr == FR_OK){
+			imprimir(vector, &temp);
+			carpeta.tamanioArchivo = f_size(&carpeta.fil);
+			carpeta.bufferRead = malloc(carpeta.tamanioArchivo);
+			while(carpeta.tamanioArchivo > 0)
 			{
-				// Si no crea nada, viene acá.
-				while (1);
+				carpeta.fr = f_read (&carpeta.fil, carpeta.bufferRead, (UINT)sizeof(carpeta.bufferWrite), &carpeta.ByteRead);
+				carpeta.tamanioArchivo -= sizeof(carpeta.bufferWrite);
 			}
+			carpeta.fr = f_write (&carpeta.fil, vector, sizeof(carpeta.bufferWrite), &carpeta.BytesWritten); // Escribe
+			// Buscar hasta el final del archivo para agregar datos
+			carpeta.fr = f_lseek(&carpeta.fil, f_size(&carpeta.fil));
+			// En caso de que no poder escribirse la carpeta se debe cerrarla.
+			for (uint8_t i = 0; i < 40; i++)
+				vector[i] ='\0';
+			if (carpeta.fr != FR_OK)
+				f_close(&carpeta.fil);
 			// Se creó la carpeta TecnicasDigitalesIII, debemos cerrar la carpeta.
-			f_close(&carpeta.fil);
+		}
+		f_close(&carpeta.fil);
 	}
+
 }
+void imprimir(char *cadena, float *valor){
+
+	int aux2, aux3;
+	char cad [2], cad1 [2];
+	*valor = *valor * 100;    	    // nn,ddc -> nndd,c
+	aux2 = (int) *valor ;     	    // nndd,c -> nndd
+	aux3 = aux2 - (aux2/100) * 100; // nndd - nndd/100 -> dd
+	aux2 = aux2 / 100;				// nn
+
+	itoa (aux2, cad, 10 );
+	itoa (aux3, cad1, 10 );
+	strcpy(cadena, "\ntemperatura: ");
+	strcat(cadena, cad);
+	strcat(cadena, ".");
+	strcat(cadena, cad1);
+}
+

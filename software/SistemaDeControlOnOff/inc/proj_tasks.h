@@ -37,5 +37,6 @@ void btnTask(void *params);
 void lm35Task(void *params);
 void displayTask(void *params);
 void sdWriteTask(void *params);
+void imprimir(char *cadena, float *valor);
 
 #endif /* PROJ_TASKS_H_ */
