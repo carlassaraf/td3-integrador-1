@@ -8,7 +8,7 @@
 #include "proj_tasks.h"
 
 /* Cola para el ADC */
-xQueueHandle queueADC, queueSD, queueSP;
+xQueueHandle queueTEMP, queueSP;
 
 
 void initTask(void *params) {
@@ -69,8 +69,8 @@ void btnTask(void *params) {
 					break;
 			}
 			/* Mando el setpoint a la cola */
-			xQueueSendToBack(queueSP, &setpoint, portMAX_DELAY);
 		}
+		xQueueSendToBack(queueSP, &setpoint, portMAX_DELAY);
 		/* Bloqueo la tarea por un rato */
 		vTaskDelay(DELAY_MS / portTICK_RATE_MS);
 	}
@@ -93,10 +93,6 @@ void lm35Task(void *params) {
 void displayTask(void *params) {
 	/* Delay entre cambio de digitos */
 	const uint8_t DELAY_MS = 5;
-	/* Factor de conversion para el valor del ADC */
-	const float conv_factor = 3.3 / (1 << 12);
-	/* Variable para guardar el valor del ADC */
-	uint16_t adc;
 	/* Variable para guardar la temperatura/setpoint */
 	float temp;
 
@@ -104,14 +100,11 @@ void displayTask(void *params) {
 		/* Chequeo que tengo que mostrar */
 		if(TEMPERATURE_SELECTED) {
 			/* Bloqueo la tarea hasta que termine la interrupcion */
-			xQueueReceive(queueADC, &adc, portMAX_DELAY);
-			/* Calculo la temperatura */
-			temp = conv_factor * adc * 100;
-			xQueueSendToBack(queueSD, &temp, portMAX_DELAY);
+			xQueuePeek(queueTEMP, &temp, portMAX_DELAY);
 		}
 		else {
 			/* Bloqueo la tarea hasta que llegue el dato de la cola */
-			xQueueReceive(queueSP, &temp, portMAX_DELAY);
+			xQueuePeek(queueSP, &temp, portMAX_DELAY);
 		}
 		/* Obtengo el primer digito */
 		uint8_t digit1 = (uint8_t)(temp / 10);
@@ -191,7 +184,7 @@ void sdWriteTask(void *params){
 		vector[i] ='\0';
 	while(1)
 	{
-		xQueueReceive(queueSD, &temp, portMAX_DELAY);
+		xQueuePeek(queueTEMP, &temp, portMAX_DELAY);
 		carpeta.fr = f_mount(&carpeta.fs, "0:", 0); // Registro un objeto del sistema de archivos para una unidad lógica "0:", es decir es el Driver.
 		carpeta.fr = f_open(&carpeta.fil, "td3.c", FA_READ | FA_WRITE); // Si no existe crea.
 		if (carpeta.fr == FR_OK){
@@ -214,8 +207,17 @@ void sdWriteTask(void *params){
 			// Se creó la carpeta TecnicasDigitalesIII, debemos cerrar la carpeta.
 		}
 		f_close(&carpeta.fil);
+		vTaskDelay(1000 / portTICK_RATE_MS);
 	}
 
+}
+void celdaTask(void *params){
+	float temp, sp;
+
+	while(1){
+		xQueueReceive(queueTEMP, &temp, portMAX_DELAY);
+		xQueueReceive(queueSP, &sp, portMAX_DELAY);
+	}
 }
 void imprimir(char *cadena, float *valor){
 
