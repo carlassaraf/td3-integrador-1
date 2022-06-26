@@ -24,17 +24,15 @@ void SPI_ConfigClockRate (uint32_t spi_ClockRate)
 uint8_t SPI_EscribirComando(uint8_t comando)
 {
 	// Activar esclavo
-	SPI_Pin(SSEL1, Bajo);
 	SPI_Pin(SSEL0, Alto);
-
     /* Put the data on the FIFO */
     LPC_SSP0->DR = comando;
 
     /* Wait for sending to complete */
     while (LPC_SSP0->SR & SSP_SR_BSY);
 
-    //SPI_Pin(DC_RS, Dato);
     SPI_Pin(SSEL1, Alto);
+
     /* Return the received value */
     return (LPC_SSP0->DR);
 }
@@ -57,6 +55,7 @@ uint8_t SPI_EscribirByte (uint8_t data)
 uint8_t SD_EscribirByte (uint8_t data)
 {
 	SPI_Pin(SSEL0, Bajo);
+	SPI_Pin(F_CS, Bajo);
 	SPI_Pin(SSEL1, Alto);
 	SPI_ConfigClockRate (SPI_CLOCKRATE_LOW);
 	//SPI_Pin(DC_RS, Dato);
@@ -90,12 +89,16 @@ uint8_t SD_RecibirByteVar (uint8_t dato)
 
 void SPI_Inicializar(void)
 {
-    LPC_SYSCTL->PCONP |= (0x1 << 10);
+    LPC_SYSCTL->PCONP |= (0x1 << 21);		// POWER SSP0
 
-    LPC_SYSCTL->PCLKSEL[0] |= (0x01 << 20);  // SSP1_PCLK = CCLK/1 (100 MHz)
+    LPC_SYSCTL->PCLKSEL[1] |= (0x01 << 10); // SSP0_PCLK = CCLK/1 (100 MHz)
+
+    LPC_IOCON->PINSEL[0] &= ~(0x3 << 00);	// F_CS  -  P0.0
+    LPC_IOCON->PINSEL[0] &= ~(0x3 << 12);	// SSEL1 -	P0.6
     LPC_IOCON->PINSEL[1] &= ~(0x3 << 00);	// SSEL0 -	P0.16
 
-    LPC_GPIO->DIR |= (1 << 16);			 	// SET P0.17 COMO SALIDA (SSEL0)
+    LPC_GPIO->DIR |= (1 << 06);			 	// SET P0.6  COMO SALIDA (SSEL1)
+    LPC_GPIO->DIR |= (1 << 16);			 	// SET P0.16 COMO SALIDA (SSEL0)
 
     LPC_IOCON->PINSEL[0] |= (0x2 << 30); 	// SCK0  -	P0.15
     LPC_IOCON->PINSEL[1] |= (0x2 << 02)  	// MISO0 -	P0.18
@@ -116,8 +119,11 @@ void SPI_Inicializar(void)
     SPI_ConfigClockRate (SPI_CLOCKRATE_HIGH);
 
     /* Set SSEL to high */
-    SPI_Pin(SSEL1, Alto);
     SPI_Pin(SSEL0, Alto);
+    SPI_Pin(SSEL1, Alto);
+
+    /* Inicializo RITimer */
+	Chip_RIT_Init(LPC_RITIMER);
 }
 
 

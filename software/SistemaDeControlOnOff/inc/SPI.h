@@ -12,12 +12,9 @@
 
 
 typedef enum pinesSPI{
-	F_CS  	  = 0,
-	TFT_RESET = 1,
-	SSEL1 	  = 6,
+	F_CS	  = 0,
+	SSEL1	  = 6,
 	SSEL0 	  = 16,
-	LED 	  = 17,
-	DC_RS 	  = 18,
 }PinSPI;
 
 typedef enum estadoSPI{

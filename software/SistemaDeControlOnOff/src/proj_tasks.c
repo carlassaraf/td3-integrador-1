@@ -8,7 +8,7 @@
 #include "proj_tasks.h"
 
 /* Cola para el ADC */
-xQueueHandle queueADC;
+xQueueHandle queueADC, queueSD;
 
 void initTask(void *params) {
 	/* Sets up DEBUG UART */
@@ -18,7 +18,7 @@ void initTask(void *params) {
     /* Inicializo los 7 Segmentos */
     gpio_7segments_init();
     /* Inicializo SPI */
-    //SPI_Inicializar();
+    SPI_Inicializar();
     /* Elimino inicializacion */
     vTaskDelete(NULL);
 }
@@ -76,12 +76,16 @@ void displayTask(void *params) {
 		gpio_7segments_write(digit3);
 		/* Bloqueo la tarea por unos momentos */
 		vTaskDelay(DELAY_MS / portTICK_RATE_MS);
+		xQueueSendToBack(queueSD, &temp, portMAX_DELAY);
 	}
 }
 
 void sdWriteTask(void *params){
 
 	sd_variables_t carpeta;
+
+	/* Inicializo RITimer */
+	Chip_RIT_Init(LPC_RITIMER);
 
     /* Inicializamos y verificamos que se inicialice correctamente el SD*/
     if (SD_Init (&carpeta.tipo) == SD_FALSE)
@@ -102,9 +106,9 @@ void sdWriteTask(void *params){
     carpeta.fr = f_mount(&carpeta.fs, "0:", 0); // Registro un objeto del sistema de archivos para una unidad lógica "0:", es decir es el Driver.
     carpeta.fr = f_open(&carpeta.fil, "TD3.txt", FA_WRITE | FA_CREATE_ALWAYS); // Si no existe crea.
     if (carpeta.fr == FR_OK) {
-    	carpeta.fr = f_write (&carpeta.fil, carpeta.bufferWrite, sizeof(carpeta.bufferWrite), &carpeta.BytesWritten); // Escribe
+    	//carpeta.fr = f_write (&carpeta.fil, carpeta.bufferWrite, sizeof(carpeta.bufferWrite), &carpeta.BytesWritten); // Escribe
     	// Buscar hasta el final del archivo para agregar datos
-    	carpeta.fr = f_lseek(&carpeta.fil, f_size(&carpeta.fil));
+    	//carpeta.fr = f_lseek(&carpeta.fil, f_size(&carpeta.fil));
 
         // En caso de que no poder escribirse la carpeta se debe cerrarla.
         if (carpeta.fr != FR_OK)
@@ -120,8 +124,32 @@ void sdWriteTask(void *params){
 	// Se creó la carpeta TecnicasDigitalesIII, debemos cerrar la carpeta.
 	f_close(&carpeta.fil);
 
+	float temp;
+	char vector[20];
 	while(1)
 	{
+		xQueueReceive(queueSD, &temp, portMAX_DELAY);
+		itoa(temp, vector, 10);
+		strcat(vector, "\n");
+		carpeta.fr = f_mount(&carpeta.fs, "0:", 0); // Registro un objeto del sistema de archivos para una unidad lógica "0:", es decir es el Driver.
+		carpeta.fr = f_open(&carpeta.fil, "TD3.txt", FA_WRITE); // Si no existe crea.
+		if (carpeta.fr == FR_OK) {
+		    	carpeta.fr = f_write (&carpeta.fil, vector, sizeof(carpeta.bufferWrite), &carpeta.BytesWritten); // Escribe
+		    	// Buscar hasta el final del archivo para agregar datos
+		    	carpeta.fr = f_lseek(&carpeta.fil, f_size(&carpeta.fil));
 
+		        // En caso de que no poder escribirse la carpeta se debe cerrarla.
+		        if (carpeta.fr != FR_OK)
+		            f_close(&carpeta.fil);
+		    }
+
+		    // Verifico que se haya creado correctamente.
+			if (carpeta.fr != FR_OK)
+			{
+				// Si no crea nada, viene acá.
+				while (1);
+			}
+			// Se creó la carpeta TecnicasDigitalesIII, debemos cerrar la carpeta.
+			f_close(&carpeta.fil);
 	}
 }

@@ -9,6 +9,7 @@
 #define PROJ_TASKS_H_
 
 #include <stdlib.h>
+#include <string.h>
 #include "FreeRTOS.h"
 #include "task.h"
 #include "queue.h"
@@ -17,25 +18,16 @@
 #include "SPI.h"
 #include "sd.h"
 
+#include "ff.h"
+#include "ffconf.h"
+#include "diskio.h"
+
 #define tskINIT_PRIORITY		tskIDLE_PRIORITY + 3UL
 #define tskLM35_PRIORITY		tskIDLE_PRIORITY + 1UL
 #define tsk7SEG_PRIORITY		tskIDLE_PRIORITY + 2UL
 #define tskSDWRITE_PRIOTITY		tskIDLE_PRIORITY + 1UL
 
-extern xQueueHandle queueADC;
-
-typedef struct{
-	CARDCONFIG CardConfig;
-	SD_BOOL tipo; 	// tipo se usa para ver el la version de la SD pero en este caso no es necesario, si para poder utilziar la funcion INIT
-    FRESULT fr; 	// variable para leer los retornos de las funciones FATS
-    FATFS fs; 		// Variable tipo FATS
-    FIL fil; 		// Archivos
-    uint32_t tamanioArchivo;
-    UINT BytesWritten;
-    UINT ByteRead;
-    char bufferWrite[20]; // Buffer
-    char *bufferRead;
-} sd_variables_t;
+extern xQueueHandle queueADC, queueSD;
 
 void initTask(void *params);
 void lm35Task(void *params);
