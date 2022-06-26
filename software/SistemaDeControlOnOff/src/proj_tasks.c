@@ -8,7 +8,8 @@
 #include "proj_tasks.h"
 
 /* Cola para el ADC */
-xQueueHandle queueADC, queueSD;
+xQueueHandle queueADC, queueSD, queueSP;
+
 
 void initTask(void *params) {
 	/* Sets up DEBUG UART */
@@ -17,10 +18,62 @@ void initTask(void *params) {
     adc_init();
     /* Inicializo los 7 Segmentos */
     gpio_7segments_init();
+    /* Inicializo botones */
+    gpio_btn_init();
     /* Inicializo SPI */
     SPI_Inicializar();
-    /* Elimino inicializacion */
+    /* Elimino tarea */
     vTaskDelete(NULL);
+}
+
+void btnTask(void *params) {
+	/* Delay para captura de botones */
+	const uint16_t DELAY_MS = 250;
+	/* Setpoint inicial */
+	float setpoint = 25.0;
+	/* Variable para verificar que digito modificar */
+	uint8_t digits = 0x04;
+	/* Valor de incremento/decremento */
+	int8_t inc = 0;
+
+	while(1) {
+		/* Solo valido si se elige mostrar el setpoint */
+		if(SETPOINT_SELECTED) {
+			/* Veo si se sube o baja el valor del setpoint */
+			/* Si el boton up se apreto, se incrementa */
+			if(gpio_get_btn_up()) { inc = 1; }
+			/* Si el boton down se apreto, se decrementa */
+			else if(gpio_get_btn_down()) { inc = -1; }
+			/* Si el boton enter se apreto, no cambia el setpoint, pero cambio de digito */
+			else if (gpio_get_btn_enter()) {
+				/* No hay incremento */
+				inc = 0;
+				/* Voy al digito de la derecha*/
+				digits >>= 1;
+				/* Vuelvo al primer digito */
+				if(digits == 0) { digits = 0x04; }
+			}
+			/* Reviso el digito */
+			switch (digits) {
+				/* Si es el primer digito, cambio la decena */
+				case 0b100:
+					setpoint += inc * 10;
+					break;
+				/* Si es el segundo digito, cambio la unidad */
+				case 0b010:
+					setpoint += inc;
+					break;
+				/* Si es el tercer digito, cambio el decimal */
+				case 0b001:
+					setpoint += inc / 10.0;
+					break;
+			}
+			/* Mando el setpoint a la cola */
+			xQueueSendToBack(queueSP, &setpoint, portMAX_DELAY);
+		}
+		/* Bloqueo la tarea por un rato */
+		vTaskDelay(DELAY_MS / portTICK_RATE_MS);
+	}
 }
 
 /* Tarea que inicia las lecturas del LM35 */
@@ -44,14 +97,21 @@ void displayTask(void *params) {
 	const float conv_factor = 3.3 / (1 << 12);
 	/* Variable para guardar el valor del ADC */
 	uint16_t adc;
-	/* Variable para guardar la temperatura */
+	/* Variable para guardar la temperatura/setpoint */
 	float temp;
 
 	while(1) {
-		/* Bloqueo la tarea hasta que termine la interrupcion */
-		xQueueReceive(queueADC, &adc, portMAX_DELAY);
-		/* Calculo la temperatura */
-		temp = conv_factor * adc * 100;
+		/* Chequeo que tengo que mostrar */
+		if(TEMPERATURE_SELECTED) {
+			/* Bloqueo la tarea hasta que termine la interrupcion */
+			xQueueReceive(queueADC, &adc, portMAX_DELAY);
+			/* Calculo la temperatura */
+			temp = conv_factor * adc * 100;
+		}
+		else {
+			/* Bloqueo la tarea hasta que llegue el dato de la cola */
+			xQueueReceive(queueSP, &temp, portMAX_DELAY);
+		}
 		/* Obtengo el primer digito */
 		uint8_t digit1 = (uint8_t)(temp / 10);
 		/* Prendo el primer digito */
