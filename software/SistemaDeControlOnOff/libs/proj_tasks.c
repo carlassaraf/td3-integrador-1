@@ -138,21 +138,21 @@ void displayTask(void *params) {
 /*
  * 	@brief 	Tarea que escribe el valor de temperatura en la SD
  */
-/*void sdWriteTask(void *params){
+void sdWriteTask(void *params){
 
 	sd_variables_t carpeta;
 	uint32_t i = 0;
 
-*/    /* Inicializamos y verificamos que se inicialice correctamente el SD*/
-/*if (SD_Init (&carpeta.tipo) == SD_FALSE)
+    /* Inicializamos y verificamos que se inicialice correctamente el SD*/
+	if (SD_Init (&carpeta.tipo) == SD_FALSE)
     {
     	// No se pudo iniciar la tarjeta. por favor, revisa la tarjeta
         while (1)
         	i++;
     }
 
-*/    /* Verificamos que se pueda leer */
-/*    if (SD_ReadConfiguration (&carpeta.CardConfig) == SD_FALSE)
+    /* Verificamos que se pueda leer */
+    if (SD_ReadConfiguration (&carpeta.CardConfig) == SD_FALSE)
     {
     	// No se pudo leer
 		while (1)
@@ -160,8 +160,8 @@ void displayTask(void *params) {
     }
     // Se inicializó con exito.
 
-*/	/* Abro una carpeta que exista o creo una nueva */
-/*    carpeta.fr = f_mount(&carpeta.fs, "0:", 0); // Registro un objeto del sistema de archivos para una unidad lógica "0:", es decir es el Driver.
+	/* Abro una carpeta que exista o creo una nueva */
+    carpeta.fr = f_mount(&carpeta.fs, "0:", 0); // Registro un objeto del sistema de archivos para una unidad lógica "0:", es decir es el Driver.
     carpeta.fr = f_open(&carpeta.fil, "td3.c", FA_CREATE_ALWAYS); // Si no existe crea.
     if (carpeta.fr == FR_OK) {
     	//carpeta.fr = f_write (&carpeta.fil, carpeta.bufferWrite, sizeof(carpeta.bufferWrite), &carpeta.BytesWritten); // Escribe
@@ -184,8 +184,8 @@ void displayTask(void *params) {
 
 	float temp;
 	char vector[40];
-*/	/* vacio el vector*/
-/*	for (uint8_t i = 0; i < 40; i++)
+	/* vacio el vector*/
+	for (uint8_t i = 0; i < 40; i++)
 		vector[i] ='\0';
 	while(1)
 	{
@@ -215,7 +215,7 @@ void displayTask(void *params) {
 		vTaskDelay(1000 / portTICK_RATE_MS);
 	}
 
-}*/
+}
 
 /*
  * 	@brief	Tarea que se encarga de manejar la celda peltier
