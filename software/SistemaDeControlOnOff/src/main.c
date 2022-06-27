@@ -86,24 +86,3 @@ int main(void) {
 
     return 0 ;
 }
-
-/*
- * 	@brief	Handler para las interrupciones del ADC
- */
-void ADC_IRQHandler(void) {
-	/* Control para cambiar de tarea al salir de la interrupcion */
-	static portBASE_TYPE xHigherPriorityTaskWoken = pdFALSE;
-	/* Variable auxiliar para el valor  del ADC */
-	uint16_t adc;
-	/* Variable para la temperatura */
-	float temp;
-	/* Obtengo el valor del ADC */
-	adc_read(adc);
-	/* Convierto el valor del ADC en temperatura */
-	temp = CONV_FACTOR * (float)adc * 25;
-	/* Ingreso el valor a la cola */
-	xQueueSendToBackFromISR(queueTEMP, &temp, &xHigherPriorityTaskWoken);
-	/* Solicitar un cambio de contexto si fuese necesario */
-	portEND_SWITCHING_ISR(xHigherPriorityTaskWoken);
-}
-
