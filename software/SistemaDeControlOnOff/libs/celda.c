@@ -5,7 +5,7 @@
  *      Author: fabri
  */
 
-#include "celda.h
+#include "celda.h"
 
 void gpio_celda_init(void) {
 	/* Inicializo los pines como salida */
