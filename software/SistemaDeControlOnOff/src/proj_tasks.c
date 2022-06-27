@@ -233,27 +233,6 @@ void celdaTask(void *params){
 }
 
 /*
- * 	@brief	Funcion que se encarga de preparar el string para imprimir
- */
-void imprimir(char *cadena, float *valor){
-
-	int aux2, aux3;
-	char cad[2], cad1[2];
-	*valor = *valor * 100;    	    // nn,ddc -> nndd,c
-	aux2 = (int) *valor ;     	    // nndd,c -> nndd
-	aux3 = aux2 - (aux2/100) * 100; // nndd - nndd/100 -> dd
-	aux2 = aux2 / 100;				// nn
-
-	itoa(aux2, cad, 10);
-	itoa(aux3, cad1, 10);
-	strcpy(cadena, "\ntemperatura: ");
-	strcat(cadena, cad);
-	strcat(cadena, ".");
-	strcat(cadena, cad1);
-}
-
-
-/*
  * 	@brief	Handler para las interrupciones del ADC
  */
 void ADC_IRQHandler(void) {
