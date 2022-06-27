@@ -18,6 +18,7 @@
 #include "7segments.h"
 #include "sd.h"
 #include "buttons.h"
+#include "celda.h"
 
 /* Prioridades de tareas */
 #define tskINIT_PRIORITY		tskIDLE_PRIORITY + 4UL

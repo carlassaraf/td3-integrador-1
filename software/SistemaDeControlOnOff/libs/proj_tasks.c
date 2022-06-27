@@ -223,12 +223,40 @@ void sdWriteTask(void *params){
 void celdaTask(void *params){
 	/* Variables para guardar los valores de las colas */
 	float temp, sp;
+	/* Versiones enteras para la temperatura y setpoint */
+	uint8_t iTemp, iSp;
 
 	while(1) {
 		/* Se bbloquea hasta recibir la temperatura */
 		xQueueReceive(queueTEMP, &temp, portMAX_DELAY);
 		/* Se bloquea hasta recibir el setpoint */
 		xQueueReceive(queueSP, &sp, portMAX_DELAY);
+		/* Obtengo la temperatura y setpoint como enteros */
+		iTemp = temp;
+		iSp = sp;
+		/* Enciendo el fan */
+		gpio_fan_on(true);
+		/* Si la temperatura es menor al setpoint, calefacciono */
+		if(iTemp < iSp) {
+			/* Apago primero la refrigeracion */
+			gpio_cold_on(false);
+			/* Enciendo la calefaccion */
+			gpio_heat_on(true);
+		}
+		/* Si la temperatura es mayor al setpoint, refrigero */
+		else if(iTemp > iSp) {
+			/* Apago primero la calefaccion */
+			gpio_heat_on(false);
+			/* Enciendo la refrigeracion */
+			gpio_cold_on(true);
+		}
+		/* Si son iguales descontando los decimales, apago la celda */
+		else {
+			/* Apago la calefaccion */
+			gpio_heat_on(false);
+			/* Apago la refrigeracoin */
+			gpio_cold_on(false);
+		}
 	}
 }
 
