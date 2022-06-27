@@ -22,6 +22,8 @@ void initTask(void *params) {
     gpio_7segments_init();
     /* Inicializo botones */
     gpio_btn_init();
+    /* Inicialización de celda */
+    gpio_celda_init();
     /* Elimino tarea */
     vTaskDelete(NULL);
 }
@@ -31,7 +33,7 @@ void initTask(void *params) {
  */
 void btnTask(void *params) {
 	/* Delay para captura de botones */
-	const uint16_t DELAY_MS = 250;
+	const uint16_t DELAY_MS = 5;
 	/* Setpoint inicial */
 	float setpoint = 25.0;
 	/* Variable para verificar que digito modificar */
@@ -44,17 +46,27 @@ void btnTask(void *params) {
 		if(SETPOINT_SELECTED) {
 			/* Veo si se sube o baja el valor del setpoint */
 			/* Si el boton up se apreto, se incrementa */
-			if(!gpio_get_btn_up()) { inc = 1; }
+			if(!gpio_get_btn_up()) {
+				while(!gpio_get_btn_up());
+				inc = 1;
+			}
 			/* Si el boton down se apreto, se decrementa */
-			else if(!gpio_get_btn_down()) { inc = -1; }
+			else if(!gpio_get_btn_down()) {
+				while(!gpio_get_btn_down());
+				inc = -1;
+			}
 			/* Si el boton enter se apreto, no cambia el setpoint, pero cambio de digito */
 			else if (!gpio_get_btn_enter()) {
+				while(!gpio_get_btn_enter());
 				/* No hay incremento */
 				inc = 0;
 				/* Voy al digito de la derecha*/
 				digits >>= 1;
 				/* Vuelvo al primer digito */
 				if(digits == 0) { digits = 0x04; }
+			}
+			else{
+				inc = 0;
 			}
 			/* Reviso el digito */
 			switch (digits) {
@@ -88,7 +100,7 @@ void btnTask(void *params) {
  */
 void lm35Task(void *params) {
 	/* Delay entre conversiones */
-	const uint16_t DELAY_MS = 1000;
+	const uint16_t DELAY_MS = 5;
 
 	while(1) {
 		/* Inicio la conversion */
@@ -273,7 +285,7 @@ void ADC_IRQHandler(void) {
 	/* Obtengo el valor del ADC */
 	adc_read(adc);
 	/* Convierto el valor del ADC en temperatura */
-	temp = CONV_FACTOR * (float)adc * 25;
+	temp = CONV_FACTOR * (float)adc * 50;
 	/* Ingreso el valor a la cola */
 	xQueueSendToBackFromISR(queueTEMP, &temp, &xHigherPriorityTaskWoken);
 	/* Solicitar un cambio de contexto si fuese necesario */

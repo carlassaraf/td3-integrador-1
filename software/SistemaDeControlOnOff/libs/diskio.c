@@ -50,7 +50,7 @@ DSTATUS disk_initialize (
 {
 	//DSTATUS stat;
 	uint8_t tipo;
-	CARDCONFIG *CConfig;
+	CARDCONFIG *Config;
 	if (drv) return STA_NOINIT;			/* Supports only single drive */
 //	if (stat & STA_NODISK) return stat;	/* No card in the socket */
 

@@ -77,7 +77,7 @@ void gpio_7segments_set_digit(uint8_t digit) {
  *
  * 	@param	on: true para prenderlo, false para apagarlo
  */
-void gpio_7segments_set_dp(bool on) { Chip_GPIO_SetPinState(SEG_PORT, SEG_DP, on); }
+void gpio_7segments_set_dp(bool on) { Chip_GPIO_SetPinState(SEG_PORT, SEG_DP, !on); }
 
 /*
  * 	@brief	Prende el numero en el digito solicitado

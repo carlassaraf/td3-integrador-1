@@ -543,7 +543,7 @@ void imprimir(char *cadena, float *valor){
 
 	itoa(aux2, cad, 10);
 	itoa(aux3, cad1, 10);
-	strcpy(cadena, "\ntemperatura: ");
+	strcpy(cadena, "temperatura: ");
 	strcat(cadena, cad);
 	strcat(cadena, ".");
 	strcat(cadena, cad1);

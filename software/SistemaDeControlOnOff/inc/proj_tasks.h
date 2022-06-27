@@ -28,7 +28,7 @@
 #define tskSDWRITE_PRIOTITY		tskIDLE_PRIORITY + 2UL
 #define tskCELDA_PRIOTITY		tskIDLE_PRIORITY + 1UL
 /* Stack size de tareas */
-#define configSD_TASK_SIZE		1024
+#define configSD_TASK_SIZE		4096
 /* Factor de conversion para el valor del ADC */
 #define CONV_FACTOR  			3.3 / (1 << 12)
 
