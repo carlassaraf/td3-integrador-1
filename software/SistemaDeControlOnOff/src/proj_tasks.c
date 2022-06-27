@@ -106,39 +106,30 @@ void displayTask(void *params) {
 	const uint8_t DELAY_MS = 5;
 	/* Variable para guardar la temperatura/setpoint */
 	float temp;
+	/* Variable para almacenar cada digito separado */
+	uint8_t digit;
 
 	while(1) {
-		/* Chequeo que tengo que mostrar */
-		if(TEMPERATURE_SELECTED) {
-			/* Bloqueo la tarea hasta que termine la interrupcion */
-			xQueuePeek(queueTEMP, &temp, portMAX_DELAY);
-		}
-		else {
-			/* Bloqueo la tarea hasta que llegue el dato de la cola */
-			xQueuePeek(queueSP, &temp, portMAX_DELAY);
-		}
+		/* Si se eligio mostrar la temperatura, bloqueo la tarea hasta que la interrupcion la cargue */
+		if(TEMPERATURE_SELECTED) { xQueuePeek(queueTEMP, &temp, portMAX_DELAY); }
+		/* Si se eligio mostrar el setpoint, bloqueo la tarea hasta que este en la cola */
+		else { xQueuePeek(queueSP, &temp, portMAX_DELAY); }
 		/* Obtengo el primer digito */
-		uint8_t digit1 = (uint8_t)(temp / 10);
-		/* Prendo el primer digito */
-		gpio_7segments_set_digit(DIGIT_1);
-		/* Muestro el numero */
-		gpio_7segments_write(digit1);
+		digit = (uint8_t)(temp / 10);
+		/* Escribo el numero en el primer digito, sin el punto */
+		gpio_7segments_set(DIGIT_1, digit, false);
 		/* Bloqueo la tarea por unos momentos */
 		vTaskDelay(DELAY_MS / portTICK_RATE_MS);
 		/* Obtengo el segundo digito */
-		uint8_t digit2 = (uint8_t)temp % 10;
-		/* Prendo el segundo digito */
-		gpio_7segments_set_digit(DIGIT_2);
-		/* Muestro el numero */
-		gpio_7segments_write(digit2);
+		digit = (uint8_t)temp % 10;
+		/* Escribo el numero en el segundo digito, con el punto */
+		gpio_7segments_set(DIGIT_2, digit, true);
 		/* Bloqueo la tarea por unos momentos */
 		vTaskDelay(DELAY_MS / portTICK_RATE_MS);
 		/* Obtengo los decimales */
-		uint8_t digit3 = (uint8_t)((temp - 10 * digit1 - digit2) * 10);
-		/* Prendo el tercer digito */
-		gpio_7segments_set_digit(DIGIT_3);
-		/* Muestro el numero */
-		gpio_7segments_write(digit3);
+		digit = (uint8_t)((temp - 10 * digit1 - digit2) * 10);
+		/* Escribo el numero en el tercer digito, sin el punto */
+		gpio_7segments_set(DIGIT_3, digit, false);
 		/* Bloqueo la tarea por unos momentos */
 		vTaskDelay(DELAY_MS / portTICK_RATE_MS);
 	}

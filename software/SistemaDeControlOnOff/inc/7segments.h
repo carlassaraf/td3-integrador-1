@@ -49,7 +49,8 @@
 void gpio_7segments_init(void);
 void gpio_7segments_clear(void);
 void gpio_7segments_write(uint8_t number);
-void gpio_7segments_set_digit(uint8_t number);
+void gpio_7segments_set_digit(uint8_t digit);
 void gpio_7segments_set_dp(bool on);
+void gpio_7segments_set(uint8_t digit, uint8_t number, bool dp);
 
 #endif /* _7SEGMENTS_H_ */

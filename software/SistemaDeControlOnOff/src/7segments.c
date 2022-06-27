@@ -60,9 +60,9 @@ void gpio_7segments_write(uint8_t number) {
 /*
  * 	@brief	Prende el digito elegido
  *
- * 	@param	number: DIGITO_1, DIGITO_2 o DIGITO_3
+ * 	@param	digit: DIGITO_1, DIGITO_2 o DIGITO_3
  */
-void gpio_7segments_set_digit(uint8_t number) {
+void gpio_7segments_set_digit(uint8_t digit) {
 	/* Apago los tres 7 segmentos */
 	Chip_GPIO_SetPinState(DIGIT_PORT, DIGIT_1, true);
 	Chip_GPIO_SetPinState(DIGIT_PORT, DIGIT_2, true);
@@ -77,3 +77,19 @@ void gpio_7segments_set_digit(uint8_t number) {
  * 	@param	on: true para prenderlo, false para apagarlo
  */
 void gpio_7segments_set_dp(bool on) { Chip_GPIO_SetPinState(SEG_PORT, SEG_DP, on); }
+
+/*
+ * 	@brief	Prende el numero en el digito solicitado
+ *
+ * 	@param	digit: DIGIT_1, DIGIT_2 o DIGIT_3
+ * 	@param	number: un numero del 0 al 9
+ * 	@param	dp: true para prender el DP, false para apagarlo
+ */
+void gpio_7segments_set(uint8_t digit, uint8_t number, bool dp) {
+	/* Prendo el digito */
+	gpio_7segments_set_digit(digit);
+	/* Escribo el numero */
+	gpio_7segments_write(number);
+	/* Prendo/apago el DP */
+	gpio_7segments_set_dp(dp);
+}
