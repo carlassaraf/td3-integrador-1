@@ -12,8 +12,8 @@
  *
  ******************************************************************************/
 
+#include <spi.h>
 #include "sd.h"
-#include "SPI.h"
 
 /* Command definitions in SPI bus mode */
 #define GO_IDLE_STATE           0
