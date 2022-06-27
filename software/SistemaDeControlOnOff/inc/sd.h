@@ -16,10 +16,10 @@
 #define __SD_H
              /* LPC17xx Definitions */
 #include "stdio.h"
-#include "board.h"
 #include "ff.h"
 #include "ffconf.h"
 #include "diskio.h"
+#include "chip.h"
 /* type defintion */
 typedef unsigned char    SD_BOOL;
 #define SD_TRUE     1

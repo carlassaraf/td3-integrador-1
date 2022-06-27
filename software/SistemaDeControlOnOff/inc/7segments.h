@@ -7,7 +7,6 @@
 
 #ifndef _7SEGMENTS_H_
 #define _7SEGMENTS_H_
-#include "board.h"
 
 #include "chip.h"
 
@@ -22,10 +21,15 @@
 
 #define DP	7
 
-#define DIGIT_1	4
+#define DIGIT_1	10
 #define DIGIT_2	5
-#define DIGIT_3	10
+#define DIGIT_3	4
 
+#define DIG_1	(1 << 10)
+#define DIG_2	(1 << 5)
+#define DIG_3	(1 << 4)
+
+#define DIGITS 		DIG_1 | DIG_2 | DIG_3
 #define SEGMENTS	SEG_A | SEG_B | SEG_C | SEG_D | SEG_E | SEG_F | SEG_G | SEG_DP
 
 void gpio_7segments_init(void);

@@ -8,7 +8,6 @@
 ===============================================================================
 */
 
-#include "board.h"
 #include "proj_tasks.h"
 
 extern xQueueHandle queueTEMP, queueSP;
@@ -66,14 +65,14 @@ int main(void) {
 	);
 
     /* Creacion de tareas */
-	xTaskCreate(
-		sdWriteTask, 							/* Callback para la tarea */
-		(const signed char *) "Escritura SD",	/* Nombre de la tarea para debugging */
-		configSD_TASK_SIZE, 				    /* Minimo stack para la tarea */
-		NULL, 									/* Sin parametros */
-		tskSDWRITE_PRIOTITY,					/* Prioridad */
-		NULL									/* Sin handler */
-	);
+	//xTaskCreate(
+	//	sdWriteTask, 							/* Callback para la tarea */
+	//	(const signed char *) "Escritura SD",	/* Nombre de la tarea para debugging */
+	//	configSD_TASK_SIZE, 				    /* Minimo stack para la tarea */
+	//	NULL, 									/* Sin parametros */
+	//	tskSDWRITE_PRIOTITY,					/* Prioridad */
+	//	NULL									/* Sin handler */
+	//);
 
     /* Creacion de tareas */
 	xTaskCreate(
@@ -102,7 +101,7 @@ void ADC_IRQHandler(void) {
 	float temp;
 	/* Obtengo el valor del ADC */
 	adc_read(adc);
-	temp = conv_factor * (float)adc * 100;
+	temp = conv_factor * (float)adc * 25;
 	/* Ingreso el valor a la cola */
 	xQueueSendToBackFromISR(queueTEMP, &temp, &xHigherPriorityTaskWoken);
 	/* Solicitar un cambio de contexto si fuese necesario */

@@ -21,8 +21,8 @@
 #define gpio_get_btn_enter()	gpio_get_btn(BTN_ENTER)
 #define gpio_get_btn_change()	gpio_get_btn(BTN_CHANGE)
 
-#define TEMPERATURE		0
-#define SETPOINT		1
+#define TEMPERATURE		1
+#define SETPOINT		0
 
 #define TEMPERATURE_SELECTED	gpio_get_btn_change() == TEMPERATURE
 #define SETPOINT_SELECTED		gpio_get_btn_change() == SETPOINT

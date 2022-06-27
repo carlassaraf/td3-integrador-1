@@ -24,7 +24,8 @@ uint8_t numbers[] = {
 
 void gpio_7segments_init(void) {
 	/* Inicializo los pines como salidas */
-	Chip_GPIO_SetPortDIROutput(LPC_GPIO, 2, SEGMENTS);
+	Chip_GPIO_SetPortDIROutput(LPC_GPIO, 0, DIGITS);
+	Chip_GPIO_SetPortDIROutput(LPC_GPIO2, 2, SEGMENTS);
 	Chip_IOCON_Init(LPC_IOCON);
 }
 
@@ -41,20 +42,20 @@ void gpio_7segments_write(uint8_t number) {
 		/* Si el bit de esa posicion esta en uno, true, sino, false */
 		bool state = (val & (1 << pin))? true : false;
 		/* Escribo el valor del pin */
-		Chip_GPIO_SetPinState(LPC_GPIO, 2, pin, state);
+		Chip_GPIO_SetPinState(LPC_GPIO2, 2, pin, state);
 	}
 }
 
 void gpio_7segments_set_digit(uint8_t number) {
 	/* Apago los tres 7 segmentos */
-	Chip_GPIO_SetPinState(LPC_GPIO, 2, DIGIT_1, false);
-	Chip_GPIO_SetPinState(LPC_GPIO, 2, DIGIT_2, false);
-	Chip_GPIO_SetPinState(LPC_GPIO, 2, DIGIT_3, false);
+	Chip_GPIO_SetPinState(LPC_GPIO, 0, DIGIT_1, true);
+	Chip_GPIO_SetPinState(LPC_GPIO, 0, DIGIT_2, true);
+	Chip_GPIO_SetPinState(LPC_GPIO, 0, DIGIT_3, true);
 	/* Prendo el digito solicitado */
-	Chip_GPIO_SetPinState(LPC_GPIO, 2, number, true);
+	Chip_GPIO_SetPinState(LPC_GPIO, 0, number, false);
 }
 
 void gpio_7segments_set_dp(bool on) {
 
-	Chip_GPIO_SetPinState(LPC_GPIO, 2, DP, on);
+	Chip_GPIO_SetPinState(LPC_GPIO2, 2, DP, on);
 }

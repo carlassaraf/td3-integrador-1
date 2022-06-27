@@ -18,6 +18,7 @@
 #include "SPI.h"
 #include "sd.h"
 #include "buttons.h"
+#include "chip.h"
 
 #include "ff.h"
 #include "ffconf.h"

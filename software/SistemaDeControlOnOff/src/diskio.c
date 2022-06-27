@@ -12,7 +12,7 @@
 #include "sd.h"
 #include "SPI.h"
 #include "stdio.h"
-#include "board.h"
+#include "chip.h"
 
 /* Definitions of physical drive number for each drive */
 #define DEV_RAM		0	/* Example: Map Ramdisk to physical drive 0 */

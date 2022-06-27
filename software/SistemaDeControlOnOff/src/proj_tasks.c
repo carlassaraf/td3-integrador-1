@@ -6,14 +6,14 @@
  */
 
 #include "proj_tasks.h"
-
+#undef DEBUG_ENABLE
 /* Cola para el ADC */
 xQueueHandle queueTEMP, queueSP;
 
 
 void initTask(void *params) {
 	/* Sets up DEBUG UART */
-	DEBUGINIT();
+	//DEBUGINIT();
     /* Inicializo SPI */
     SPI_Inicializar();
     /* Inicializo ADC */
@@ -41,11 +41,11 @@ void btnTask(void *params) {
 		if(SETPOINT_SELECTED) {
 			/* Veo si se sube o baja el valor del setpoint */
 			/* Si el boton up se apreto, se incrementa */
-			if(gpio_get_btn_up()) { inc = 1; }
+			if(!gpio_get_btn_up()) { inc = 1; }
 			/* Si el boton down se apreto, se decrementa */
-			else if(gpio_get_btn_down()) { inc = -1; }
+			else if(!gpio_get_btn_down()) { inc = -1; }
 			/* Si el boton enter se apreto, no cambia el setpoint, pero cambio de digito */
-			else if (gpio_get_btn_enter()) {
+			else if (!gpio_get_btn_enter()) {
 				/* No hay incremento */
 				inc = 0;
 				/* Voy al digito de la derecha*/
@@ -68,6 +68,8 @@ void btnTask(void *params) {
 					setpoint += inc / 10.0;
 					break;
 			}
+			if(setpoint < 0){ setpoint = 0; }
+			if(setpoint >= 100.0){ setpoint = 99.9; }
 			/* Mando el setpoint a la cola */
 		}
 		xQueueSendToBack(queueSP, &setpoint, portMAX_DELAY);
@@ -133,21 +135,21 @@ void displayTask(void *params) {
 	}
 }
 
-void sdWriteTask(void *params){
+/*void sdWriteTask(void *params){
 
 	sd_variables_t carpeta;
 	uint32_t i = 0;
 
-    /* Inicializamos y verificamos que se inicialice correctamente el SD*/
-    if (SD_Init (&carpeta.tipo) == SD_FALSE)
+*/    /* Inicializamos y verificamos que se inicialice correctamente el SD*/
+/*if (SD_Init (&carpeta.tipo) == SD_FALSE)
     {
     	// No se pudo iniciar la tarjeta. por favor, revisa la tarjeta
         while (1)
         	i++;
     }
 
-    /* Verificamos que se pueda leer */
-    if (SD_ReadConfiguration (&carpeta.CardConfig) == SD_FALSE)
+*/    /* Verificamos que se pueda leer */
+/*    if (SD_ReadConfiguration (&carpeta.CardConfig) == SD_FALSE)
     {
     	// No se pudo leer
 		while (1)
@@ -155,8 +157,8 @@ void sdWriteTask(void *params){
     }
     // Se inicializó con exito.
 
-	/* Abro una carpeta que exista o creo una nueva */
-    carpeta.fr = f_mount(&carpeta.fs, "0:", 0); // Registro un objeto del sistema de archivos para una unidad lógica "0:", es decir es el Driver.
+*/	/* Abro una carpeta que exista o creo una nueva */
+/*    carpeta.fr = f_mount(&carpeta.fs, "0:", 0); // Registro un objeto del sistema de archivos para una unidad lógica "0:", es decir es el Driver.
     carpeta.fr = f_open(&carpeta.fil, "td3.c", FA_CREATE_ALWAYS); // Si no existe crea.
     if (carpeta.fr == FR_OK) {
     	//carpeta.fr = f_write (&carpeta.fil, carpeta.bufferWrite, sizeof(carpeta.bufferWrite), &carpeta.BytesWritten); // Escribe
@@ -179,8 +181,8 @@ void sdWriteTask(void *params){
 
 	float temp;
 	char vector[40];
-	/* vacio el vector*/
-	for (uint8_t i = 0; i < 40; i++)
+*/	/* vacio el vector*/
+/*	for (uint8_t i = 0; i < 40; i++)
 		vector[i] ='\0';
 	while(1)
 	{
@@ -210,7 +212,7 @@ void sdWriteTask(void *params){
 		vTaskDelay(1000 / portTICK_RATE_MS);
 	}
 
-}
+}*/
 void celdaTask(void *params){
 	float temp, sp;
 

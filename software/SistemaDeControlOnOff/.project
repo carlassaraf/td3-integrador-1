@@ -3,7 +3,6 @@
 	<name>SistemaDeControlOnOff</name>
 	<comment></comment>
 	<projects>
-		<project>lpc_board_nxp_lpcxpresso_1769</project>
 		<project>lpc_chip_175x_6x</project>
 		<project>freertos</project>
 	</projects>
