@@ -21,20 +21,24 @@
 #include "chip.h"
 
 #include "ff.h"
-#include "ffconf.h"
 #include "diskio.h"
 
+/* Prioridades de tareas */
 #define tskINIT_PRIORITY		tskIDLE_PRIORITY + 4UL
 #define	tskBTN_PRIORITY			tskIDLE_PRIORITY + 3UL
-#define tskLM35_PRIORITY		tskIDLE_PRIORITY + 2UL
 #define tsk7SEG_PRIORITY		tskIDLE_PRIORITY + 3UL
+#define tskLM35_PRIORITY		tskIDLE_PRIORITY + 2UL
 #define tskSDWRITE_PRIOTITY		tskIDLE_PRIORITY + 2UL
 #define tskCELDA_PRIOTITY		tskIDLE_PRIORITY + 1UL
 
-#define configSD_TASK_SIZE		1000
+/* Stack size de tareas */
+#define configSD_TASK_SIZE		1024
+
+/* Colas para usar */
 extern xQueueHandle queueTEMP, queueSP;
+
 /* Factor de conversion para el valor del ADC */
-#define conv_factor  			3.3 / (1 << 12)
+#define CONV_FACTOR  			3.3 / (1 << 12)
 
 void initTask(void *params);
 void btnTask(void *params);

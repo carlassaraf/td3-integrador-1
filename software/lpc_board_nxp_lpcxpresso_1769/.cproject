@@ -181,11 +181,5 @@
 	<storageModule moduleId="org.eclipse.cdt.core.pathentry"/>
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		<scannerConfigBuildInfo instanceId="com.crt.advproject.config.lib.debug.267437161;com.crt.advproject.config.lib.debug.267437161.;com.crt.advproject.gcc.lib.debug.1874917562;com.crt.advproject.compiler.input.541775715">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.crt.advproject.GCCManagedMakePerProjectProfile"/>
-		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="com.crt.advproject.config.lib.debug.267437161;com.crt.advproject.config.lib.debug.267437161.;com.crt.advproject.gas.lib.debug.787516598;com.crt.advproject.assembler.input.1449879717">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.crt.advproject.GCCManagedMakePerProjectProfile"/>
-		</scannerConfigBuildInfo>
 	</storageModule>
 </cproject>

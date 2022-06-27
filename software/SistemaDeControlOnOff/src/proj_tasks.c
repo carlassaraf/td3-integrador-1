@@ -6,14 +6,14 @@
  */
 
 #include "proj_tasks.h"
-#undef DEBUG_ENABLE
+
 /* Cola para el ADC */
 xQueueHandle queueTEMP, queueSP;
 
-
+/*
+ * 	@brief	Tarea de inicializacion de perifericos
+ */
 void initTask(void *params) {
-	/* Sets up DEBUG UART */
-	//DEBUGINIT();
     /* Inicializo SPI */
     SPI_Inicializar();
     /* Inicializo ADC */
@@ -26,6 +26,9 @@ void initTask(void *params) {
     vTaskDelete(NULL);
 }
 
+/*
+ * 	@brief	Tarea que lee el estado de los botones y actualiza el setpoint
+ */
 void btnTask(void *params) {
 	/* Delay para captura de botones */
 	const uint16_t DELAY_MS = 250;
@@ -68,17 +71,21 @@ void btnTask(void *params) {
 					setpoint += inc / 10.0;
 					break;
 			}
-			if(setpoint < 0){ setpoint = 0; }
-			if(setpoint >= 100.0){ setpoint = 99.9; }
-			/* Mando el setpoint a la cola */
+			/* Si el setpoint es negativo, lo vuelvo a cero */
+			if(setpoint < 0) { setpoint = 0; }
+			/* Si el setpoint se excedio de 100, vuelvo a 99.9 */
+			if(setpoint >= 100.0) { setpoint = 99.9; }
 		}
+		/* Mando el setpoint a la cola */
 		xQueueSendToBack(queueSP, &setpoint, portMAX_DELAY);
 		/* Bloqueo la tarea por un rato */
 		vTaskDelay(DELAY_MS / portTICK_RATE_MS);
 	}
 }
 
-/* Tarea que inicia las lecturas del LM35 */
+/*
+ * 	@brief	Tarea que inicia las lecturas del LM35
+ */
 void lm35Task(void *params) {
 	/* Delay entre conversiones */
 	const uint16_t DELAY_MS = 1000;
@@ -91,7 +98,9 @@ void lm35Task(void *params) {
 	}
 }
 
-/* Muestreo del valor de temperatura en el 7 segmentos */
+/*
+ * 	@brief	Muestreo del valor de temperatura/setpoint en el 7 segmentos
+ */
 void displayTask(void *params) {
 	/* Delay entre cambio de digitos */
 	const uint8_t DELAY_MS = 5;
@@ -135,6 +144,9 @@ void displayTask(void *params) {
 	}
 }
 
+/*
+ * 	@brief 	Tarea que escribe el valor de temperatura en la SD
+ */
 /*void sdWriteTask(void *params){
 
 	sd_variables_t carpeta;
@@ -213,25 +225,36 @@ void displayTask(void *params) {
 	}
 
 }*/
+
+/*
+ * 	@brief	Tarea que se encarga de manejar la celda peltier
+ */
 void celdaTask(void *params){
+	/* Variables para guardar los valores de las colas */
 	float temp, sp;
 
-	while(1){
+	while(1) {
+		/* Se bbloquea hasta recibir la temperatura */
 		xQueueReceive(queueTEMP, &temp, portMAX_DELAY);
+		/* Se bloquea hasta recibir el setpoint */
 		xQueueReceive(queueSP, &sp, portMAX_DELAY);
 	}
 }
+
+/*
+ * 	@brief	Funcion que se encarga de preparar el string para imprimir
+ */
 void imprimir(char *cadena, float *valor){
 
 	int aux2, aux3;
-	char cad [2], cad1 [2];
+	char cad[2], cad1[2];
 	*valor = *valor * 100;    	    // nn,ddc -> nndd,c
 	aux2 = (int) *valor ;     	    // nndd,c -> nndd
 	aux3 = aux2 - (aux2/100) * 100; // nndd - nndd/100 -> dd
 	aux2 = aux2 / 100;				// nn
 
-	itoa (aux2, cad, 10 );
-	itoa (aux3, cad1, 10 );
+	itoa(aux2, cad, 10);
+	itoa(aux3, cad1, 10);
 	strcpy(cadena, "\ntemperatura: ");
 	strcat(cadena, cad);
 	strcat(cadena, ".");
