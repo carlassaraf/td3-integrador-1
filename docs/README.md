@@ -25,7 +25,7 @@
 | P0.21 | P0.21 | Tecla up de menu |
 | P0.22 | P0.22 | Tecla down de menu |
 | P0.27 | P0.27 | Tecla enter de menu |
-| P0.28 | P0.28 | Tecla para cambio de display |
+| P0.28 | P0.3 | Tecla para cambio de display |
 | P2.10 | P2.10 | LED RGB para tecla up |
 | P2.11 | P2.11 | LED RGB para tecla down |
 | P2.12 | P2.12 | LED RGB para tecla enter |
