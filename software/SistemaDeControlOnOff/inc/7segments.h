@@ -11,7 +11,7 @@
 #include "chip.h"
 
 /* Port de los segmentos y comunes */
-#define SEG_PORT	LPC_GPIO2, 2
+#define SEG_PORT	LPC_GPIO, 2
 #define	DIGIT_PORT	LPC_GPIO, 0
 
 /* Pines de los segmentos */

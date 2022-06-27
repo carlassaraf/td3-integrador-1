@@ -27,9 +27,10 @@ uint8_t numbers[] = {
  */
 void gpio_7segments_init(void) {
 	/* Inicializo los pines como salidas */
+	Chip_GPIO_Init(LPC_GPIO);
+	Chip_IOCON_Init(LPC_IOCON);
 	Chip_GPIO_SetPortDIROutput(DIGIT_PORT, DIGITS);
 	Chip_GPIO_SetPortDIROutput(SEG_PORT, SEGMENTS);
-	Chip_IOCON_Init(LPC_IOCON);
 }
 
 /*
