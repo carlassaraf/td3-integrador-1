@@ -83,6 +83,8 @@ uint8_t     SD_SendACommand (uint8_t cmd, uint32_t arg, uint8_t *buf, uint32_t l
 SD_BOOL     SD_RecvDataBlock (uint8_t *buf, uint32_t len);
 SD_BOOL     SD_SendDataBlock (const uint8_t *buf, uint8_t tkn, uint32_t len) ;
 SD_BOOL     SD_WaitForReady (void);
+
+void imprimir(char *cadena, float *valor);
 #endif // __SD_H
 
 /* --------------------------------- End Of File ------------------------------ */

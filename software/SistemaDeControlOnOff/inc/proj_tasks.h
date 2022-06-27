@@ -19,7 +19,6 @@
 #include "sd.h"
 #include "buttons.h"
 
-
 /* Prioridades de tareas */
 #define tskINIT_PRIORITY		tskIDLE_PRIORITY + 4UL
 #define	tskBTN_PRIORITY			tskIDLE_PRIORITY + 3UL
@@ -27,22 +26,20 @@
 #define tskLM35_PRIORITY		tskIDLE_PRIORITY + 2UL
 #define tskSDWRITE_PRIOTITY		tskIDLE_PRIORITY + 2UL
 #define tskCELDA_PRIOTITY		tskIDLE_PRIORITY + 1UL
-
 /* Stack size de tareas */
 #define configSD_TASK_SIZE		1024
+/* Factor de conversion para el valor del ADC */
+#define CONV_FACTOR  			3.3 / (1 << 12)
 
 /* Colas para usar */
 extern xQueueHandle queueTEMP, queueSP;
 
-/* Factor de conversion para el valor del ADC */
-#define CONV_FACTOR  			3.3 / (1 << 12)
-
+/* Prototipos de funciones */
 void initTask(void *params);
 void btnTask(void *params);
 void lm35Task(void *params);
 void displayTask(void *params);
 void sdWriteTask(void *params);
 void celdaTask(void *params);
-void imprimir(char *cadena, float *valor);
 
 #endif /* PROJ_TASKS_H_ */

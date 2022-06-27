@@ -71,11 +71,11 @@ int main(void) {
 	//);
 
 	xTaskCreate(
-		celdaTask, 							/* Callback para la tarea */
+		celdaTask, 								/* Callback para la tarea */
 		(const signed char *) "Celda Peltier",	/* Nombre de la tarea para debugging */
-		configMINIMAL_STACK_SIZE, 				    /* Minimo stack para la tarea */
+		configMINIMAL_STACK_SIZE, 				/* Minimo stack para la tarea */
 		NULL, 									/* Sin parametros */
-		tskCELDA_PRIOTITY,					/* Prioridad */
+		tskCELDA_PRIOTITY,						/* Prioridad */
 		NULL									/* Sin handler */
 	);
 
