@@ -68,7 +68,7 @@ void gpio_7segments_set_digit(uint8_t digit) {
 	Chip_GPIO_SetPinState(DIGIT_PORT, DIGIT_2, true);
 	Chip_GPIO_SetPinState(DIGIT_PORT, DIGIT_3, true);
 	/* Prendo el digito solicitado */
-	Chip_GPIO_SetPinState(DIGIT_PORT, number, false);
+	Chip_GPIO_SetPinState(DIGIT_PORT, digit, false);
 }
 
 /*

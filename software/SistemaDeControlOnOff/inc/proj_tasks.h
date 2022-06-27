@@ -9,19 +9,16 @@
 #define PROJ_TASKS_H_
 
 #include <stdlib.h>
-#include <string.h>
+
 #include "FreeRTOS.h"
 #include "task.h"
 #include "queue.h"
+
 #include "adc.h"
 #include "7segments.h"
-#include "SPI.h"
 #include "sd.h"
 #include "buttons.h"
-#include "chip.h"
 
-#include "ff.h"
-#include "diskio.h"
 
 /* Prioridades de tareas */
 #define tskINIT_PRIORITY		tskIDLE_PRIORITY + 4UL

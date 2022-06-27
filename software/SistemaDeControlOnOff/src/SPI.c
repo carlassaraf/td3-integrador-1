@@ -4,7 +4,6 @@
  *  Created on: 12 ene. 2022
  *      Author: Gustavo
  */
-#include "SPI.h"
 #include "sd.h"
 
 void SPI_Pin(uint8_t nroPin, uint8_t estado)

@@ -107,7 +107,7 @@ void displayTask(void *params) {
 	/* Variable para guardar la temperatura/setpoint */
 	float temp;
 	/* Variable para almacenar cada digito separado */
-	uint8_t digit;
+	uint8_t digit1, digit2, digit3;
 
 	while(1) {
 		/* Si se eligio mostrar la temperatura, bloqueo la tarea hasta que la interrupcion la cargue */
@@ -115,21 +115,21 @@ void displayTask(void *params) {
 		/* Si se eligio mostrar el setpoint, bloqueo la tarea hasta que este en la cola */
 		else { xQueuePeek(queueSP, &temp, portMAX_DELAY); }
 		/* Obtengo el primer digito */
-		digit = (uint8_t)(temp / 10);
+		digit1 = (uint8_t)(temp / 10);
 		/* Escribo el numero en el primer digito, sin el punto */
-		gpio_7segments_set(DIGIT_1, digit, false);
+		gpio_7segments_set(DIGIT_1, digit1, false);
 		/* Bloqueo la tarea por unos momentos */
 		vTaskDelay(DELAY_MS / portTICK_RATE_MS);
 		/* Obtengo el segundo digito */
-		digit = (uint8_t)temp % 10;
+		digit2 = (uint8_t)temp % 10;
 		/* Escribo el numero en el segundo digito, con el punto */
-		gpio_7segments_set(DIGIT_2, digit, true);
+		gpio_7segments_set(DIGIT_2, digit2, true);
 		/* Bloqueo la tarea por unos momentos */
 		vTaskDelay(DELAY_MS / portTICK_RATE_MS);
 		/* Obtengo los decimales */
-		digit = (uint8_t)((temp - 10 * digit1 - digit2) * 10);
+		digit3 = (uint8_t)((temp - 10 * digit1 - digit2) * 10);
 		/* Escribo el numero en el tercer digito, sin el punto */
-		gpio_7segments_set(DIGIT_3, digit, false);
+		gpio_7segments_set(DIGIT_3, digit3, false);
 		/* Bloqueo la tarea por unos momentos */
 		vTaskDelay(DELAY_MS / portTICK_RATE_MS);
 	}

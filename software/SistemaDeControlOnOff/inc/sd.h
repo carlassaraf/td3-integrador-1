@@ -15,11 +15,13 @@
 #ifndef __SD_H
 #define __SD_H
              /* LPC17xx Definitions */
+#include <string.h>
 #include "stdio.h"
 #include "ff.h"
 #include "ffconf.h"
 #include "diskio.h"
-#include "chip.h"
+#include "SPI.h"
+
 /* type defintion */
 typedef unsigned char    SD_BOOL;
 #define SD_TRUE     1
