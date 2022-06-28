@@ -22,14 +22,25 @@ void gpio_fan_on(bool on) { Chip_GPIO_SetPinState(CELDA_PORT, FAN_PIN, on); }
 
 /*
  * 	@brief	Prende el sistema de calefaccion
- *
- * 	@param	on: true para prendelo, false para apagarlo
  */
-void gpio_heat_on(bool on) { Chip_GPIO_SetPinState(CELDA_PORT, HEAT_PIN, on); }
+void gpio_heat_on(void) {
+	gpio_fan_on(true);
+	Chip_GPIO_SetPinState(CELDA_PORT, VCC_CP_PIN, false);
+	Chip_GPIO_SetPinState(CELDA_PORT, GND_CP_PIN, false);
+	gpio_fan_on(false);
+}
 
 /*
  * 	@brief	Prende el sistema de refrigeracion
- *
- * 	@param	on: true para prendelo, false para apagarlo
  */
-void gpio_cold_on(bool on) { Chip_GPIO_SetPinState(CELDA_PORT, COLD_PIN, on); }
+void gpio_cold_on(void) {
+	gpio_fan_on(true);
+	Chip_GPIO_SetPinState(CELDA_PORT, VCC_CP_PIN, true);
+	Chip_GPIO_SetPinState(CELDA_PORT, GND_CP_PIN, true);
+	gpio_fan_on(false);
+}
+
+/*
+ * 	@brief	Apaga la celda
+ */
+void gpio_celda_off(void) { gpio_fan_on(true); }

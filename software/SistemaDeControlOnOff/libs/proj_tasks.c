@@ -174,7 +174,7 @@ void sdWriteTask(void *params){
 
 	/* Abro una carpeta que exista o creo una nueva */
     carpeta.fr = f_mount(&carpeta.fs, "0:", 0); // Registro un objeto del sistema de archivos para una unidad lógica "0:", es decir es el Driver.
-    carpeta.fr = f_open(&carpeta.fil, "td3.c", FA_CREATE_ALWAYS); // Si no existe crea.
+    carpeta.fr = f_open(&carpeta.fil, "td3.csv", FA_CREATE_ALWAYS); // Si no existe crea.
     if (carpeta.fr == FR_OK) {
     	//carpeta.fr = f_write (&carpeta.fil, carpeta.bufferWrite, sizeof(carpeta.bufferWrite), &carpeta.BytesWritten); // Escribe
     	// Buscar hasta el final del archivo para agregar datos
@@ -203,7 +203,7 @@ void sdWriteTask(void *params){
 	{
 		xQueuePeek(queueTEMP, &temp, portMAX_DELAY);
 		carpeta.fr = f_mount(&carpeta.fs, "0:", 0); // Registro un objeto del sistema de archivos para una unidad lógica "0:", es decir es el Driver.
-		carpeta.fr = f_open(&carpeta.fil, "td3.c", FA_READ | FA_WRITE); // Si no existe crea.
+		carpeta.fr = f_open(&carpeta.fil, "td3.csv", FA_READ | FA_WRITE); // Si no existe crea.
 		if (carpeta.fr == FR_OK){
 			imprimir(vector, &temp);
 			carpeta.tamanioArchivo = f_size(&carpeta.fil);
@@ -212,6 +212,7 @@ void sdWriteTask(void *params){
 			{
 				carpeta.fr = f_read (&carpeta.fil, carpeta.bufferRead, (UINT)sizeof(carpeta.bufferWrite), &carpeta.ByteRead);
 				carpeta.tamanioArchivo -= sizeof(carpeta.bufferWrite);
+
 			}
 			carpeta.fr = f_write (&carpeta.fil, vector, sizeof(carpeta.bufferWrite), &carpeta.BytesWritten); // Escribe
 			// Buscar hasta el final del archivo para agregar datos
@@ -250,24 +251,18 @@ void celdaTask(void *params){
 		gpio_fan_on(true);
 		/* Si la temperatura es menor al setpoint, calefacciono */
 		if(iTemp < iSp) {
-			/* Apago primero la refrigeracion */
-			gpio_cold_on(false);
 			/* Enciendo la calefaccion */
-			gpio_heat_on(true);
+			gpio_heat_on();
 		}
 		/* Si la temperatura es mayor al setpoint, refrigero */
 		else if(iTemp > iSp) {
-			/* Apago primero la calefaccion */
-			gpio_heat_on(false);
 			/* Enciendo la refrigeracion */
-			gpio_cold_on(true);
+			gpio_cold_on();
 		}
 		/* Si son iguales descontando los decimales, apago la celda */
 		else {
-			/* Apago la calefaccion */
-			gpio_heat_on(false);
-			/* Apago la refrigeracoin */
-			gpio_cold_on(false);
+			/* Apago la celda */
+			gpio_celda_off();
 		}
 	}
 }

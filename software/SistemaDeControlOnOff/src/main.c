@@ -61,14 +61,14 @@ int main(void) {
 		NULL									/* Sin handler */
 	);
 
-	//xTaskCreate(
-	//	sdWriteTask, 							/* Callback para la tarea */
-	//	(const signed char *) "Escritura SD",	/* Nombre de la tarea para debugging */
-	//	configSD_TASK_SIZE, 				    /* Minimo stack para la tarea */
-	//	NULL, 									/* Sin parametros */
-	//	tskSDWRITE_PRIOTITY,					/* Prioridad */
-	//	NULL									/* Sin handler */
-	//);
+	xTaskCreate(
+		sdWriteTask, 							/* Callback para la tarea */
+		(const signed char *) "Escritura SD",	/* Nombre de la tarea para debugging */
+		configSD_TASK_SIZE, 				    /* Minimo stack para la tarea */
+		NULL, 									/* Sin parametros */
+		tskSDWRITE_PRIOTITY,					/* Prioridad */
+		NULL									/* Sin handler */
+	);
 
 	xTaskCreate(
 		celdaTask, 								/* Callback para la tarea */

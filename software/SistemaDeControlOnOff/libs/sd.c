@@ -547,6 +547,7 @@ void imprimir(char *cadena, float *valor){
 	strcat(cadena, cad);
 	strcat(cadena, ".");
 	strcat(cadena, cad1);
+	strcat(cadena, ";\n");
 }
 
 /* --------------------------------- End Of File ------------------------------ */
