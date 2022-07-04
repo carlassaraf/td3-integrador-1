@@ -1,5 +1,17 @@
 # docs
 
+## Herencia de prioridad
+
+### Sin MUTEX
+
+![](nomutex.png)
+
+### Con MUTEX
+
+![](mutex.png)
+
+La diferencia entre el caso 1 y caso 2 se encuentra en que en el primero se ejecutará la tarea con mayor prioridad indefinidamente mientras que en el caso 2 utilizando MUTEX la tarea con un nivel inferior de prioridad puede trabajar “como si” tuviese un nivel de prioridad mayor. Con esto se alternan las tareas de prioridad mayor y la de prioridad menor a la hora de utilizar el recurso del microcontrolador.
+
 ## Pin Map
 
 | Pn.xx | Funcion | Modulo |
