@@ -2,6 +2,11 @@
  * Desarrollar un programa ejemplo que permita comprender el concepto y uso de “Semáforos Mutex"
  */
 
+/*
+ * 	En este ejemplo, la tarea del pulsador es la que hace un give al semaforo, mientras que la del LED espera a
+ * 	poder hacer un take en el semaforo.
+ */
+
 #include "chip.h"
 #include "FreeRTOS.h"
 #include "task.h"
