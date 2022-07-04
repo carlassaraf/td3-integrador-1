@@ -3,6 +3,13 @@
  *	Como mínimo se deben utilizar dos tareas y una cola gestionando un recurso del microcontrolador.
  */
 
+/*
+ * 	En este ejemplo, la tarea de mediana prioridad (el pulsador) nunca se bloquea, por lo que la del LED nunca se usa.
+ * 	Cuando el pulsador se aprieta, la tarea del pulsador hace que la prioridad de la tarea del LED suba a una mayor que si misma.
+ * 	Esto hace que el Scheduler vaya a atender la tarea del LED que tiene mas prioridad, quien luego hacer lo que debia, se baja la priodidad
+ * 	a si misma, volviendo a repetir el proceso anterior.
+ */
+
 #include "chip.h"
 #include "FreeRTOS.h"
 #include "task.h"
@@ -22,7 +29,8 @@
 #define SW_PIN 0
 
 /* Prioridades para cambiar */
-#define HIGH_PRIORITY	(tskIDLE_PRIORITY + 2UL)
+#define HIGH_PRIORITY	(tskIDLE_PRIORITY + 3UL)
+#define MID_PRIORITY	(tskIDLE_PRIORITY + 2UL)
 #define LOW_PRIORITY	(tskIDLE_PRIORITY + 1UL)
 
 /* LED Task Handlers */
@@ -97,8 +105,8 @@ int main(void){
 	/* Inicializo cola */
 	queue = xQueueCreate(1, sizeof(bool));
 	/* Creacion de tareas */
-	xTaskCreate(LEDRtask, (const signed char *) "", configMINIMAL_STACK_SIZE, NULL, LOW_PRIORITY, (xTaskHandle *) NULL);
-	xTaskCreate(SWtask, (const signed char *) "", configMINIMAL_STACK_SIZE, NULL, HIGH_PRIORITY, (xTaskHandle *) NULL);
+	xTaskCreate(LEDRtask, (const signed char *) "", configMINIMAL_STACK_SIZE, NULL, LOW_PRIORITY, LEDRhandle);
+	xTaskCreate(SWtask, (const signed char *) "", configMINIMAL_STACK_SIZE, NULL, MID_PRIORITY, (xTaskHandle *) NULL);
     /* Inicia el scheduler */
 	vTaskStartScheduler();
 
